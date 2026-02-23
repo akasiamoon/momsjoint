@@ -37,11 +37,6 @@ function updateEnvironment() {
     const clock = document.getElementById('sink-clock');
     const bg = document.getElementById('bg-image');
 
-    // Time Formatting
-    let hh = h % 12 || 12;
-    let mm = now.getMinutes().toString().padStart(2, '0');
-    if(clock) clock.innerText = `${hh}:${mm} ${h >= 12 ? 'PM' : 'AM'}`;
-
     // Sky Swapping
     if (h >= 5 && h < 7) bg.src = IMAGES.dawn;
     else if (h >= 7 && h < 17) bg.src = IMAGES.day;
