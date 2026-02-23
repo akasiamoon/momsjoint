@@ -21,11 +21,11 @@ function updateEnvironment() {
 
     // Make sure your filenames exactly match the ones in your folder!
     if (hour >= 6 && hour < 17) {
-        bgImage.src = "image_8cf21b.jpg"; // Day 
+        bgImage.src = "momsjointday.jpg"; // Day 
     } else if (hour >= 17 && hour < 20) {
-        bgImage.src = "image_8d759c.jpg"; // Sunset 
+        bgImage.src = "momsjointsunset.jpg"; // Sunset 
     } else {
-        bgImage.src = "image_8d75d6.jpg"; // Night 
+        bgImage.src = ",p,sjointnight.jpg"; // Night 
     }
 }
 updateEnvironment();
