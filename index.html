@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cozy Kitchen Dashboard</title>
+    <title>Tamriel Cozy Kitchen Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Cormorant+Garamond:wght@400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -11,93 +12,97 @@
 <div class="app-container">
     <img src="image_8cf21b.jpg" alt="Cozy Kitchen" id="bg-image">
 
-    <div id="hidden-link-grid">
-        <div class="hidden-item" onclick="openApp('todo')" title="To Do List"></div>
-        <div class="hidden-item" onclick="openApp('weekly-meal-plan')" title="Weekly Meal Plan"></div>
-        <div class="hidden-item" onclick="openApp('calendar')" title="Calendar"></div>
-        <div class="hidden-item" onclick="openApp('market-list')" title="Market List"></div>
-        <div class="hidden-item" onclick="openApp('bible-verse')" title="Bible Verse of the Day"></div>
+    <div id="table-zone" onclick="openApp('contingency-ledger')" title="Open Contingency Ledger"></div>
+
+    <div id="bookshelf-panel">
         
-        <div class="hidden-item" onclick="openApp('contingency-ledger')" title="Contingency Ledger"></div>
-        <div class="hidden-item" onclick="openApp('recipes')" title="Recipes"></div>
-        <div class="hidden-item" onclick="openApp('dev-ideas')" title="Web App & Gaming Dev Ideas"></div>
-        <div class="hidden-item" onclick="openApp('mood-log')" title="Mood Log"></div>
-        <div class="hidden-item" onclick="openApp('budget-ledger')" title="Budget Ledger"></div>
-        
-        <div class="hidden-item" onclick="openApp('notes')" title="Notes"></div>
-        <div class="hidden-item" onclick="openApp('sleep-log')" title="Sleep Log"></div>
-        <div class="hidden-item" onclick="openApp('meal-log')" title="Meal Log"></div>
-        <div class="hidden-item" onclick="openApp('water-log')" title="Water Log"></div>
-        <div class="hidden-item" onclick="openApp('self-care-log')" title="Self Care Log"></div>
-        
-        <div class="hidden-item" onclick="openApp('phoebe')" title="Phoebe"></div>
-        <div class="hidden-item" onclick="openApp('tripp')" title="Tripp"></div>
-        <div class="hidden-item" onclick="openApp('cory')" title="Cory"></div>
-        <div class="hidden-item"></div> <div class="hidden-item"></div> </div>
+        <div class="panel-section">
+            <h3><span class="icon">📅</span> Calendar</h3>
+            <div id="calendar-header">
+                <span id="month-year-display"></span>
+            </div>
+            <div id="calendar-grid">
+                </div>
+        </div>
+
+        <div class="panel-section">
+            <h3 class="collapsible-header" onclick="toggleSection('market-content')">
+                <span class="icon">🛒</span> Market List <span class="arrow">▼</span>
+            </h3>
+            <div id="market-content" class="collapsible-content">
+                <input type="text" id="market-input" placeholder="Type and press Enter..." onkeypress="handleEnter(event, 'market')">
+                <ul id="market-list"></ul>
+                <button class="clear-btn" onclick="clearList('market')">Clear List</button>
+            </div>
+        </div>
+
+        <div class="panel-section">
+            <h3 class="collapsible-header" onclick="toggleSection('notes-content')">
+                <span class="icon">📜</span> Notes <span class="arrow">▼</span>
+            </h3>
+            <div id="notes-content" class="collapsible-content">
+                <input type="text" id="notes-input" placeholder="Type and press Enter..." onkeypress="handleEnter(event, 'notes')">
+                <ul id="notes-list"></ul>
+                <button class="clear-btn" onclick="clearList('notes')">Clear Notes</button>
+            </div>
+        </div>
+
+        <div id="wax-seal" onclick="toggleTOC()" title="Open Table of Contents">
+            <div class="seal-inner">TOC</div>
+        </div>
+    </div>
+
+    <div id="toc-modal" class="hidden">
+        <h2>Table of Contents</h2>
+        <div id="toc-grid">
+            <button onclick="openApp('todo')">To Do List</button>
+            <button onclick="openApp('weekly-meal-plan')">Weekly Meal Plan</button>
+            <button onclick="openApp('bible-verse')">Bible Verse</button>
+            <button onclick="openApp('recipes')">Recipes</button>
+            <button onclick="openApp('dev-ideas')">Dev Ideas</button>
+            <button onclick="openApp('mood-log')">Mood Log</button>
+            <button onclick="openApp('budget-ledger')">Budget Ledger</button>
+            <button onclick="openApp('sleep-log')">Sleep Log</button>
+            <button onclick="openApp('meal-log')">Meal Log</button>
+            <button onclick="openApp('water-log')">Water Log</button>
+            <button onclick="openApp('self-care-log')">Self Care Log</button>
+            <button onclick="openApp('phoebe')">Phoebe</button>
+            <button onclick="openApp('tripp')">Tripp</button>
+            <button onclick="openApp('cory')">Cory</button>
+        </div>
+        <button class="close-toc" onclick="toggleTOC()">Close</button>
+    </div>
 
     <div id="window-zone"></div>
-    
     <div id="sink-clock">00:00</div>
-
-<div id="avatar-corner">
-        <img src="avatar.jpg" alt="My Avatar" id="user-avatar" onclick="toggleAvatarMenu()">
-        
+    <div id="hearth-zone" onclick="toggleAudioMenu()" title="Open Soundscapes"></div>
+    
+    <div id="avatar-corner">
+        <img src="my-avatar.png" alt="My Avatar" id="user-avatar" onclick="toggleAvatarMenu()">
         <div id="avatar-stats-box" class="hidden">
             <div class="avatar-buttons">
                 <button id="save-btn" onclick="exportData()">💾 Export</button>
                 <button id="load-btn" onclick="document.getElementById('import-file').click()">📂 Load</button>
                 <input type="file" id="import-file" style="display: none;" onchange="importData(event)" accept=".json">
             </div>
-            
             <div id="account-balance">Balance: $0.00</div>
             <div id="daily-info">Loading today's info...</div>
         </div>
     </div>
 
-    <div id="hearth-zone" onclick="toggleAudioMenu()" title="Open Soundscapes"></div>
-    
-    <div id="audio-menu" class="hidden">
-        <h3>Hearth Soundscapes</h3>
-        
-        <div class="audio-section">
-            <label for="ambient-select">Ambient Noise:</label>
-            <select id="ambient-select" onchange="changeAudio('ambient')">
-                <option value="fire.mp3">Crackling Fire</option>
-                <option value="rain.mp3">Rainstorm</option>
-                <option value="tavern.mp3">Busy Tavern</option>
-            </select>
-            <audio id="ambient-player" loop controls>
-                <source src="fire.mp3" type="audio/mpeg">
-            </audio>
-        </div>
-
-        <div class="audio-section">
-            <label for="primary-select">Primary Audio (Music/Book):</label>
-            <select id="primary-select" onchange="changeAudio('primary')">
-                <option value="lofi.mp3">Lofi Beats</option>
-                <option value="audiobook.mp3">Current Audiobook</option>
-                <option value="podcast.mp3">Podcast</option>
-            </select>
-            <audio id="primary-player" controls>
-                <source src="lofi.mp3" type="audio/mpeg">
-            </audio>
-        </div>
-        
-        <button onclick="toggleAudioMenu()">Close Menu</button>
-    </div>
-<div id="app-modal" class="hidden">
+    <div id="app-modal" class="hidden">
         <div class="modal-content">
             <div class="modal-header">
                 <h2 id="modal-title">App Title</h2>
                 <span class="close-btn" onclick="closeModal()">&times;</span>
             </div>
-            <div id="modal-body">
-                </div>
+            <div id="modal-body"></div>
             <div class="modal-footer">
                 <button onclick="saveModalData()">Save</button>
             </div>
         </div>
     </div>
+
 </div>
 
 <script src="script.js"></script>
