@@ -26,9 +26,26 @@
         <source src="fire-crackling.mp3" type="audio/mpeg"> 
     </audio>
 
-    <div class="hidden-link" id="link-todo" title="To Do List" onclick="openModal('todo')"></div>
-    <div class="hidden-link" id="link-meal-plan" title="Weekly Meal Plan" onclick="openModal('mealplan')"></div>
-    <div class="hidden-link" id="link-recipe-book" title="Recipes" onclick="openModal('recipes')"></div>
+    <div id="hidden-link-grid">
+        <div class="hidden-item" onclick="openApp('todo')" title="To Do List"></div>
+        <div class="hidden-item" onclick="openApp('meal-plan')" title="Weekly Meal Plan"></div>
+        <div class="hidden-item" onclick="openApp('calendar')" title="Calendar"></div>
+        <div class="hidden-item" onclick="openApp('market')" title="Market List"></div>
+        
+        <div class="hidden-item" onclick="openApp('bible')" title="Verse of the Day"></div>
+        <div class="hidden-item" onclick="openApp('contingency-ledger')" title="Contingency Ledger"></div>
+        <div class="hidden-item" onclick="openApp('recipes')" title="Recipes"></div>
+        <div class="hidden-item" onclick="openApp('dev-ideas')" title="Dev Ideas"></div>
+        
+        <div class="hidden-item" onclick="openApp('mood')" title="Mood Log"></div>
+        <div class="hidden-item" onclick="openApp('budget')" title="Budget Ledger"></div>
+        <div class="hidden-item" onclick="openApp('notes')" title="Notes"></div>
+        <div class="hidden-item" onclick="openApp('sleep')" title="Sleep Log"></div>
+        
+        <div class="hidden-item" onclick="openApp('meals')" title="Meal Log"></div>
+        <div class="hidden-item" onclick="openApp('water')" title="Water Log"></div>
+        <div class="hidden-item" onclick="openApp('self-care')" title="Self Care"></div>
+        <div class="hidden-item" onclick="openApp('phoebe-tripp-cory')" title="Phoebe, Tripp, Cory"></div> 
     </div>
 
 <script src="script.js"></script>
