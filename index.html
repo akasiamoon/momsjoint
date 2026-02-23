@@ -40,9 +40,9 @@
     <div id="sink-clock">00:00</div>
 
 <div id="avatar-corner">
-        <img src="avatar.jpg" alt="My Avatar" id="user-avatar">
+        <img src="avatar.jpg" alt="My Avatar" id="user-avatar" onclick="toggleAvatarMenu()">
         
-        <div id="avatar-stats-box">
+        <div id="avatar-stats-box" class="hidden">
             <div class="avatar-buttons">
                 <button id="save-btn" onclick="exportData()">💾 Export</button>
                 <button id="load-btn" onclick="document.getElementById('import-file').click()">📂 Load</button>
@@ -52,6 +52,7 @@
             <div id="account-balance">Balance: $0.00</div>
             <div id="daily-info">Loading today's info...</div>
         </div>
+    </div>
     </div>
 
     <div id="hearth-zone" onclick="toggleAudioMenu()" title="Open Soundscapes"></div>
