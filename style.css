@@ -92,14 +92,20 @@ body, html {
 }
 
 #avatar-stats-box {
-    background: rgba(20, 20, 20, 0.8); /* Dark, sleek glass look */
-    border: 1px solid rgba(212, 175, 55, 0.5); /* Softer golden border */
+    /* Lowered the opacity slightly from 0.8 to 0.5 to let more of the kitchen show through */
+    background: rgba(20, 20, 20, 0.5); 
+    
+    /* THE GLASSMORPHISM MAGIC: Blurs whatever is behind this box */
+    backdrop-filter: blur(10px); 
+    -webkit-backdrop-filter: blur(10px); /* For Safari support */
+    
+    border: 1px solid rgba(212, 175, 55, 0.3); /* Made the border a bit softer */
     border-radius: 12px;
-    padding: 50px 15px 15px 15px; /* Huge top padding to make room for the overlapping avatar */
+    padding: 50px 15px 15px 15px; 
     width: 100%;
-    box-sizing: border-box; /* Keeps padding from breaking the width */
+    box-sizing: border-box; 
     color: white;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.6); /* Deeper, softer shadow for floating effect */
     display: flex;
     flex-direction: column;
     gap: 12px;
