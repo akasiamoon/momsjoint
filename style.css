@@ -152,3 +152,93 @@ audio {
 #audio-menu button:hover {
     background: #777;
 }
+/* --- APP MODAL --- */
+#app-modal {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7); /* Dark semi-transparent overlay */
+    z-index: 40; /* Highest layer so it sits above everything */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#app-modal.hidden {
+    display: none;
+}
+
+.modal-content {
+    background: #2a2a2a;
+    border: 2px solid #d4af37;
+    border-radius: 10px;
+    width: 80%;
+    max-width: 600px;
+    max-height: 80%;
+    display: flex;
+    flex-direction: column;
+    color: white;
+    box-shadow: 0 0 20px rgba(0,0,0,0.8);
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 20px;
+    border-bottom: 1px solid #d4af37;
+}
+
+.modal-header h2 {
+    margin: 0;
+    color: #d4af37;
+}
+
+.close-btn {
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+    color: #aaa;
+}
+
+.close-btn:hover {
+    color: white;
+}
+
+#modal-body {
+    padding: 20px;
+    overflow-y: auto;
+    flex-grow: 1;
+}
+
+#modal-body textarea {
+    width: 100%;
+    height: 200px;
+    background: #1a1a1a;
+    color: white;
+    border: 1px solid #555;
+    padding: 10px;
+    font-family: inherit;
+    resize: vertical;
+}
+
+.modal-footer {
+    padding: 15px 20px;
+    border-top: 1px solid #d4af37;
+    text-align: right;
+}
+
+.modal-footer button {
+    background: #d4af37;
+    border: none;
+    padding: 8px 15px;
+    font-weight: bold;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+.modal-footer button:hover {
+    background: #ffd700;
+}
