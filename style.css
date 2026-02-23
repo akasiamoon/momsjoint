@@ -67,32 +67,42 @@ body, html {
     pointer-events: none; 
 }
 
+/* --- AVATAR CORNER (MMO STYLE) --- */
 #avatar-corner {
     position: absolute;
     bottom: 2%;
     left: 2%;
-    background: rgba(0, 0, 0, 0.7);
-    color: white;
-    padding: 15px;
-    border-radius: 10px;
-    border: 1px solid #d4af37;
     z-index: 20;
-    
-    /* Flexbox helps center the avatar and stack the text neatly */
     display: flex; 
     flex-direction: column;
     align-items: center; 
-    gap: 10px; 
-    width: 220px;
+    width: 240px;
+    /* Notice: No background or border on this main container anymore! */
 }
 
 #user-avatar {
-    width: 80px;
-    height: 80px;
-    border-radius: 50%; /* Makes it a perfect circle */
-    border: 2px solid #d4af37; /* Golden border */
-    object-fit: cover; /* Ensures the image doesn't stretch or squish */
-    box-shadow: 0 0 10px rgba(0,0,0,0.5);
+    width: 90px;
+    height: 90px;
+    border-radius: 50%;
+    border: 3px solid #d4af37;
+    object-fit: cover;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.8);
+    z-index: 2; /* Keeps the avatar on top of the stats box */
+    margin-bottom: -40px; /* THE MAGIC TRICK: Pulls the box below up to overlap! */
+}
+
+#avatar-stats-box {
+    background: rgba(20, 20, 20, 0.8); /* Dark, sleek glass look */
+    border: 1px solid rgba(212, 175, 55, 0.5); /* Softer golden border */
+    border-radius: 12px;
+    padding: 50px 15px 15px 15px; /* Huge top padding to make room for the overlapping avatar */
+    width: 100%;
+    box-sizing: border-box; /* Keeps padding from breaking the width */
+    color: white;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
 }
 
 .avatar-buttons {
@@ -102,7 +112,7 @@ body, html {
 }
 
 .avatar-buttons button {
-    flex: 1; /* Makes the export and load buttons equal size */
+    flex: 1; 
     background: #d4af37;
     color: #121212;
     border: none;
@@ -110,19 +120,28 @@ body, html {
     cursor: pointer;
     border-radius: 5px;
     font-weight: bold;
-    font-size: 12px;
+    font-size: 13px;
+    transition: background 0.2s;
 }
 
 .avatar-buttons button:hover {
     background: #ffd700;
 }
 
-#account-balance, #daily-info {
-    width: 100%;
+#account-balance {
     text-align: center;
-    font-size: 14px;
+    font-size: 16px;
+    font-weight: bold;
+    color: #d4af37;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    padding-bottom: 8px;
 }
 
+#daily-info {
+    text-align: center;
+    font-size: 13px;
+    color: #ccc;
+}
 #hearth-zone {
     position: absolute;
     top: 45%;
