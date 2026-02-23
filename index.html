@@ -61,24 +61,14 @@
     <audio id="ambient-player" loop></audio>
     <audio id="primary-player"></audio>
     
-    <div id="avatar-corner">
-        <div id="avatar-stats-box" class="hidden glass">
-            <h2 class="character-title">Keeper of the Hearth</h2>
-            <div class="character-stats">
-                <div class="stat-row">
-                    <span>Vault</span> 
-                    <span id="account-balance">0.00</span>
-                </div>
-                <div class="stat-row">
-                    <span>Region</span> 
-                    <span>Farmington</span>
-                </div>
-            </div>
-            <div class="character-actions">
-                <button onclick="exportData()">Export Scroll</button>
-                <button onclick="document.getElementById('import-file').click()">Load Scroll</button>
-                <input type="file" id="import-file" style="display: none;" onchange="importData(event)" accept=".json">
-            </div>
+   <div id="avatar-corner">
+    <div id="avatar-stats-box" class="hidden glass">
+        <h2 class="character-title">Keeper Amber</h2>
+        <div class="stat-row"><span>Vault</span> <span>0.00</span></div>
+        <button onclick="exportData()">Export Scroll</button>
+    </div>
+    <img src="avatar.jpg" id="user-avatar" onclick="toggleAvatarMenu()">
+</div>
         </div>
         <img src="avatar.jpg" alt="Character Sheet" id="user-avatar" onclick="toggleAvatarMenu()">
     </div>
