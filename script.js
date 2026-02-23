@@ -6,65 +6,69 @@ const IMAGES = {
     night: "momsjointnight.jpg"
 };
 const API_KEY = "88f3e35af62ba59bad38a3d346e0ca84";
-const LOCATIONS = [ { zip: "38834", name: "Farmington", id: "sink-temp-ms" }, { zip: "38310", name: "Adamsville", id: "sink-temp-tn" } ];
 let currentAudio = null;
 
-// --- 2. DATA MANAGEMENT ---
-let appData = JSON.parse(localStorage.getItem('moonshearthData')) || { market: [], vault: 0.00, events: {} };
+// --- 2. DATA MANAGEMENT (Crash-Proof) ---
+let appData = JSON.parse(localStorage.getItem('moonshearthData')) || {};
+if (!appData.market) appData.market = [];
+if (!appData.vault) appData.vault = 0.00;
+if (!appData.events) appData.events = {};
 
 function save() {
     localStorage.setItem('moonshearthData', JSON.stringify(appData));
-    document.getElementById('vault-balance').innerText = parseFloat(appData.vault).toFixed(2);
+    const vaultDisplay = document.getElementById('vault-balance');
+    if (vaultDisplay) vaultDisplay.innerText = parseFloat(appData.vault).toFixed(2);
 }
 
 // --- 3. SYSTEM IGNITION ---
 window.onload = function() {
     updateEnvironment();
-    fetchWeather();
+    fetchWeatherOrb();
     renderAlmanac();
     fetchHolyWise();
-    save(); // Init vault display
+    save(); 
     renderList('market');
     
-    setInterval(updateEnvironment, 60000); // Check time every minute
-    setInterval(fetchWeather, 900000); // Check weather every 15 mins
+    setInterval(updateEnvironment, 60000); // Check sky every minute
+    setInterval(fetchWeatherOrb, 900000); // Check weather every 15 mins
 };
 
-// --- 4. THE LIVING BACKGROUND & CHRONOS ---
+// --- 4. LIVING BACKGROUND & ORB ---
 function updateEnvironment() {
-    const now = new Date();
-    const h = now.getHours();
-    const clock = document.getElementById('sink-clock');
+    const h = new Date().getHours();
     const bg = document.getElementById('bg-image');
+    if (!bg) return;
 
-    // Sky Swapping
     if (h >= 5 && h < 7) bg.src = IMAGES.dawn;
     else if (h >= 7 && h < 17) bg.src = IMAGES.day;
     else if (h >= 17 && h < 20) bg.src = IMAGES.sunset;
     else bg.src = IMAGES.night;
 }
 
-async function fetchWeather() {
-    for (let loc of LOCATIONS) {
-        try {
-            const r = await fetch(`https://api.openweathermap.org/data/2.5/weather?zip=${loc.zip},us&units=imperial&appid=${API_KEY}`);
-            const d = await r.json();
-            if (d.main) {
-                document.getElementById(loc.id).innerText = `${loc.name}: ${Math.round(d.main.temp)}°F | ${d.weather[0].main}`;
-            }
-        } catch(e) { document.getElementById(loc.id).innerText = `${loc.name}: Skies Obscured`; }
+async function fetchWeatherOrb() {
+    const tempDisp = document.getElementById('orb-temp');
+    const descDisp = document.getElementById('orb-desc');
+    const locDisp = document.getElementById('orb-loc');
+    if (!tempDisp) return;
+
+    try {
+        // Fetches Farmington (38834)
+        const res = await fetch(`https://api.openweathermap.org/data/2.5/weather?zip=38834,us&units=imperial&appid=${API_KEY}`);
+        const data = await res.json();
+        
+        if (data.main) {
+            tempDisp.innerText = `${Math.round(data.main.temp)}°`;
+            descDisp.innerText = data.weather[0].main;
+            locDisp.innerText = "Farmington, MS";
+        }
+    } catch(e) {
+        tempDisp.innerText = "--°";
+        descDisp.innerText = "Clouded";
     }
 }
 
-// --- 5. THE ALMANAC & EVENTS ---
+// --- 5. THE ALMANAC ---
 let curDate = new Date();
-
-function getMoonPhase(y, m, d) {
-    let c = 365.25 * (m < 3 ? y - 1 : y), e = 30.6 * (m < 3 ? m + 13 : m + 1);
-    let jd = (c + e + d - 694039.09) / 29.5305882;
-    let b = Math.round((jd - Math.floor(jd)) * 8);
-    return ['New', 'Waxing Crescent', 'First Quarter', 'Waxing Gibbous', 'Full', 'Waning Gibbous', 'Last Quarter', 'Waning Crescent'][b % 8];
-}
 
 function renderAlmanac() {
     const grid = document.getElementById('almanac-grid');
@@ -83,28 +87,31 @@ function renderAlmanac() {
     for (let i = 1; i <= days; i++) {
         const d = document.createElement('div');
         d.className = 'almanac-day';
-        const dateKey = `${m + 1}-${i}`;
+        const dateKey = `${y}-${m+1}-${i}`;
         
-        if (i === new Date().getDate() && m === new Date().getMonth()) d.classList.add('today');
-        if (dateKey === "5-26" || appData.events[`${y}-${m+1}-${i}`]) d.classList.add('has-event');
+        if (i === new Date().getDate() && m === new Date().getMonth() && y === new Date().getFullYear()) {
+            d.classList.add('today');
+        }
+        if (appData.events[dateKey]) d.classList.add('has-event');
         
         d.innerText = i;
         d.onclick = () => {
-            let info = `Moon: ${getMoonPhase(y, m+1, i)}`;
-            if (dateKey === "5-26") info += `<br><span style="color:#cda24b">Amber's Birthday</span>`;
-            if (appData.events[`${y}-${m+1}-${i}`]) info += `<br>Record: ${appData.events[`${y}-${m+1}-${i}`]}`;
-            
+            let info = appData.events[dateKey] ? `Record: ${appData.events[dateKey]}` : "No records inscribed.";
             document.getElementById('almanac-info').innerHTML = info;
             
-            let note = prompt("Inscribe Day Record:", appData.events[`${y}-${m+1}-${i}`] || "");
-            if (note !== null) { appData.events[`${y}-${m+1}-${i}`] = note; save(); renderAlmanac(); }
+            let note = prompt(`Inscribe record for ${m+1}/${i}/${y}:`, appData.events[dateKey] || "");
+            if (note !== null) { 
+                if(note.trim() === "") delete appData.events[dateKey];
+                else appData.events[dateKey] = note; 
+                save(); renderAlmanac(); 
+            }
         };
         grid.appendChild(d);
     }
 }
 function changeMonth(dir) { curDate.setMonth(curDate.getMonth() + dir); renderAlmanac(); }
 
-// --- 6. UI & MODAL HANDLING ---
+// --- 6. UI & MODALS ---
 function togglePanel(id) { document.getElementById(id).classList.toggle('hidden'); }
 function toggleSection(id) { document.getElementById(id).classList.toggle('hidden'); }
 function closeModal() { document.getElementById('app-modal').classList.add('hidden'); }
@@ -115,14 +122,14 @@ function openApp(appId) {
     m.setAttribute('data-app', appId);
     document.getElementById('modal-title').innerText = appId.replace('-', ' ').toUpperCase();
     
-    let instructions = "Hit Enter to add a timestamped log. Use #hashtags.";
-    if (appId === 'budget-ledger') instructions = "Ledger Engine active. Start a new line with + or - and a number to auto-update your Vault Balance (e.g., +50 Payday, -20 Groceries).";
-    document.getElementById('modal-instructions').innerText = instructions;
+    let inst = "Hit Enter to add a timestamped log. Use #hashtags.";
+    if (appId === 'budget-ledger') inst = "Ledger Engine: Start a new line with + or - and a number to auto-update Vault Balance (e.g., +50 Payday).";
+    document.getElementById('modal-instructions').innerText = inst;
     
     const ta = document.getElementById('app-input');
     ta.value = appData[appId] || "";
     
-    // The Smart Logger (Timestamping on Enter)
+    // Smart Logger
     ta.onkeydown = function(e) {
         if (e.key === "Enter") {
             e.preventDefault();
@@ -141,7 +148,7 @@ function saveModal() {
     const text = document.getElementById('app-input').value;
     appData[appId] = text;
     
-    // The Ledger Engine
+    // Ledger Math Engine
     if (appId === 'budget-ledger') {
         let newBalance = 0;
         const lines = text.split('\n');
@@ -155,11 +162,10 @@ function saveModal() {
         appData.vault = newBalance;
     }
     
-    save();
-    closeModal();
+    save(); closeModal();
 }
 
-// --- 7. LISTS & HASHTAGS ---
+// --- 7. MARKET LIST ---
 function handleLog(e, listName) {
     if (e.key === "Enter") {
         const input = document.getElementById(`${listName}-input`);
@@ -178,7 +184,6 @@ function renderList(listName) {
     ul.innerHTML = "";
     appData[listName].forEach(item => {
         const li = document.createElement('li');
-        // Highlight hashtags
         li.innerHTML = item.replace(/(#\w+)/g, '<span style="color:var(--eso-gold)">$1</span>');
         ul.appendChild(li);
     });
@@ -186,42 +191,21 @@ function renderList(listName) {
 function filterList(listName) {
     const term = document.getElementById(`${listName}-search`).value.toLowerCase();
     const items = document.getElementById(`${listName}-list`).getElementsByTagName('li');
-    for (let li of items) {
-        li.style.display = li.innerText.toLowerCase().includes(term) ? "" : "none";
-    }
+    for (let li of items) { li.style.display = li.innerText.toLowerCase().includes(term) ? "" : "none"; }
 }
 function clearList(listName) { if(confirm("Purge all items?")) { appData[listName] = []; save(); renderList(listName); } }
 
-// --- 8. HOLY & WISE API ---
-async function fetchHolyWise() {
-    try {
-        const vRes = await fetch('https://bible-api.com/?random=verse');
-        const vData = await vRes.json();
-        if(vData.verses) document.getElementById('daily-verse').innerText = `"${vData.verses[0].text.trim()}" - ${vData.reference}`;
-    } catch(e) { document.getElementById('daily-verse').innerText = "The connection to the archives is silent."; }
-    
-    // Fallback array in case CORS blocks the external affirmation API
-    const affirmations = ["You are the anchor of this hearth.", "Wisdom grows in quiet moments.", "Your strength protects the lineage.", "Breathe. The storm will pass."];
-    document.getElementById('daily-affirmation').innerText = affirmations[Math.floor(Math.random() * affirmations.length)];
-}
-
-// --- 9. AUDIO ENGINE ---
+// --- 8. AUDIO ENGINE ---
 function playAudio(filename) {
     if (currentAudio) currentAudio.pause();
     currentAudio = new Audio(filename);
     currentAudio.loop = true;
-    currentAudio.play().catch(e => console.warn("Audio unlinked:", e));
+    currentAudio.play().catch(e => console.warn("Audio blocked by browser:", e));
 }
 function stopAudio() { if (currentAudio) currentAudio.pause(); }
 
-// --- 10. AI GOBLIN FAMILIAR ---
-const goblinQuotes = [
-    "I checked the market list. We need more salt.",
-    "The ledger demands your attention, Keeper.",
-    "Should I stoke the hearth fire?",
-    "Phoebe left a book on the table.",
-    "Do not forget to log your daily records."
-];
+// --- 9. AI GOBLIN ---
+const goblinQuotes = ["The ledger demands attention, Keeper.", "A storm approaches.", "Do not forget to log your daily records.", "I checked the market list. We need salt."];
 function pokeGoblin() {
     const d = document.getElementById('goblin-dialogue');
     d.innerText = goblinQuotes[Math.floor(Math.random() * goblinQuotes.length)];
@@ -229,12 +213,24 @@ function pokeGoblin() {
     setTimeout(() => d.classList.add('hidden'), 5000);
 }
 
-// --- 11. EXPORT / IMPORT ---
+// --- 10. HOLY & WISE API ---
+async function fetchHolyWise() {
+    try {
+        const vRes = await fetch('https://bible-api.com/?random=verse');
+        const vData = await vRes.json();
+        if(vData.verses) document.getElementById('daily-verse').innerText = `"${vData.verses[0].text.trim()}" - ${vData.reference}`;
+    } catch(e) { document.getElementById('daily-verse').innerText = "The connection is silent."; }
+    
+    const affirmations = ["You are the anchor of this hearth.", "Wisdom grows in quiet moments.", "Your strength protects the lineage.", "Breathe. The storm will pass."];
+    document.getElementById('daily-affirmation').innerText = affirmations[Math.floor(Math.random() * affirmations.length)];
+}
+
+// --- 11. EXPORT/IMPORT ---
 function exportData() {
     const blob = new Blob([JSON.stringify(appData)], {type: 'application/json'});
     const a = document.createElement('a');
     a.href = URL.createObjectURL(blob);
-    a.download = `Moonshearth_Ledger_${new Date().toLocaleDateString().replace(/\//g,'-')}.json`;
+    a.download = `Moonshearth_Ledger.json`;
     a.click();
 }
 function importData(e) {
