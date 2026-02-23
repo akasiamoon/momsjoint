@@ -1,48 +1,151 @@
-:root { --eso-gold: #cda24b; --eso-gold-dim: #8b6d32; --eso-dark: rgba(10, 10, 10, 0.95); }
+/* --- 1. CORE SYSTEM --- */
+:root {
+    --eso-gold: #cda24b;
+    --eso-gold-dim: #8b6d32;
+    --eso-dark-glass: rgba(10, 10, 10, 0.9);
+    --glass-border: 1px solid rgba(205, 162, 75, 0.4);
+    --glow: 0 0 15px rgba(205, 162, 75, 0.5);
+}
 
-body, html { margin: 0; padding: 0; width: 100%; height: 100%; background: #000; overflow: hidden; font-family: 'Cormorant Garamond', serif; color: #e0d8c8; }
+* { box-sizing: border-box; } /* Prevents padding from breaking widths */
 
-.app-container { position: relative; width: 100vw; height: 100vh; overflow: hidden; }
+body, html {
+    margin: 0; padding: 0; 
+    width: 100vw; height: 100vh; 
+    background: #000; 
+    overflow: hidden; 
+    font-family: 'Cormorant Garamond', serif; 
+    color: #e0d8c8;
+}
 
-/* FIX THE ZOOM */
-#bg-image { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: contain; background: #000; z-index: 1; }
+.app-container {
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+}
 
-/* ATMOSPHERE */
-.atmosphere-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 5; background: radial-gradient(circle, rgba(205, 162, 75, 0.04), transparent); animation: breathe 8s infinite; }
-@keyframes breathe { 0%, 100% { opacity: 0.3; } 50% { opacity: 0.6; } }
+/* --- 2. THE BACKGROUND (The "No-Zoom" Fix) --- */
+#bg-image {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    object-fit: cover; /* This fills the screen without bars or weird zooms */
+    z-index: 1;
+}
 
-/* ALMANAC & PANEL */
-#bookshelf-panel { position: absolute; top: 5%; left: 3%; width: 280px; max-height: 85%; background: var(--eso-dark); border: 2px solid var(--eso-gold); padding: 15px; z-index: 50; box-shadow: 0 0 30px #000; overflow-y: auto; }
-.almanac-title { font-family: 'Cinzel'; color: var(--eso-gold); text-align: center; border-bottom: 1px solid var(--eso-gold-dim); padding-bottom: 10px; margin-bottom: 10px; position: relative; }
+.atmosphere-overlay {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    pointer-events: none;
+    z-index: 5;
+    background: radial-gradient(circle, rgba(205, 162, 75, 0.05), transparent);
+    animation: breathe 10s infinite ease-in-out;
+}
 
-/* ALMANAC CLOSE BUTTON */
-.almanac-close { position: absolute; top: -5px; right: 0; color: var(--eso-gold-dim); cursor: pointer; font-size: 20px; }
-.almanac-close:hover { color: #fff; }
+@keyframes breathe { 0%, 100% { opacity: 0.3; } 50% { opacity: 0.7; } }
 
-#almanac-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; }
-.almanac-day { text-align: center; padding: 5px; cursor: pointer; transition: 0.2s; border: 1px solid transparent; }
-.almanac-day:hover { border-color: var(--eso-gold); box-shadow: 0 0 10px var(--eso-gold); }
-.almanac-day.today { background: var(--eso-gold-dim); color: #000; font-weight: bold; }
-.almanac-day.has-event { color: var(--eso-gold); font-weight: bold; text-decoration: underline; }
+/* --- 3. GLASSMORPHISM --- */
+.glass {
+    background: var(--eso-dark-glass);
+    backdrop-filter: blur(12px) saturate(150%);
+    border: var(--glass-border);
+    box-shadow: 0 10px 40px rgba(0,0,0,0.8);
+}
 
-#almanac-info { margin-top: 10px; padding: 10px; background: rgba(0,0,0,0.5); border: 1px solid rgba(205,162,75,0.2); font-size: 14px; text-align: center; }
-.highlight { color: var(--eso-gold); font-family: 'Cinzel'; display: block; }
+/* --- 4. CLICK ZONES (The "Interactive" Layer) --- */
+#bookshelf-trigger, #hearth-trigger, #table-trigger {
+    position: absolute;
+    z-index: 10;
+    cursor: pointer;
+    transition: background 0.3s;
+}
 
-/* CLOCK */
-#sink-clock { position: absolute; top: 60%; right: 25%; color: var(--eso-gold); font-family: 'Cinzel'; font-size: 2.2vw; text-shadow: 2px 2px 4px #000; z-index: 10; pointer-events: none; }
+/* These coordinates are based on the full screen image */
+#bookshelf-trigger { top: 5%; left: 3%; width: 18%; height: 60%; }
+#hearth-trigger { top: 45%; left: 22%; width: 12%; height: 25%; }
+#table-trigger { bottom: 8%; right: 28%; width: 22%; height: 25%; }
 
-/* AVATAR FIX (No Blur) */
-#avatar-corner { position: absolute; bottom: 2%; right: 2%; z-index: 100; text-align: right; }
-#user-avatar { width: 120px; height: 120px; border-radius: 50%; border: 3px solid var(--eso-gold); cursor: pointer; object-fit: cover; image-rendering: auto; }
-#avatar-stats-box { background: var(--eso-dark); border: 1px solid var(--eso-gold); padding: 10px; margin-bottom: 5px; }
+#bookshelf-trigger:hover, #hearth-trigger:hover, #table-trigger:hover {
+    background: rgba(205, 162, 75, 0.1);
+    box-shadow: inset 0 0 20px rgba(205, 162, 75, 0.2);
+}
 
-/* TRIGGERS */
-#bookshelf-trigger { position: absolute; top: 5%; left: 3%; width: 20%; height: 60%; z-index: 10; cursor: pointer; }
+/* --- 5. FIXED UI ELEMENTS --- */
+#sink-clock {
+    position: absolute;
+    top: 62%; right: 26%;
+    color: var(--eso-gold);
+    font-family: 'Cinzel', serif;
+    font-size: 2.2vw;
+    text-shadow: 0 0 10px #000;
+    z-index: 15;
+    pointer-events: none;
+}
 
-/* MODALS */
+#avatar-corner {
+    position: absolute;
+    bottom: 20px; right: 20px;
+    z-index: 100;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+}
+
+#user-avatar {
+    width: 130px; height: 130px;
+    border-radius: 50%;
+    border: 3px solid var(--eso-gold);
+    cursor: pointer;
+    box-shadow: 0 0 20px #000;
+    object-fit: cover;
+    transition: 0.3s;
+}
+
+#user-avatar:hover { transform: scale(1.05); box-shadow: var(--glow); }
+
+#avatar-stats-box { width: 260px; padding: 20px; margin-bottom: 10px; border-radius: 4px; }
+
+/* --- 6. MODALS & ALMANAC --- */
+#bookshelf-panel { position: absolute; top: 5%; left: 3%; width: 300px; padding: 20px; z-index: 50; border-radius: 4px; }
+
 .hidden { display: none !important; }
-#app-modal, #toc-modal { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 200; display: flex; justify-content: center; align-items: center; }
-.modal-content { background: var(--eso-dark); border: 2px solid var(--eso-gold); padding: 25px; width: 80%; max-width: 500px; }
-textarea { width: 100%; height: 200px; background: #000; color: #fff; border: 1px solid var(--eso-gold-dim); padding: 10px; font-family: inherit; font-size: 16px; }
-button { background: var(--eso-gold); color: #000; border: none; padding: 8px 15px; cursor: pointer; font-family: 'Cinzel'; font-weight: bold; margin: 5px; transition: 0.2s; }
-button:hover { background: #fff; }
+
+#app-modal, #toc-modal {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: rgba(0,0,0,0.85);
+    z-index: 200;
+    display: flex; justify-content: center; align-items: center;
+}
+
+.modal-content {
+    padding: 30px;
+    width: 90%; max-width: 550px;
+}
+
+button {
+    background: linear-gradient(to bottom, #cda24b, #8b6d32);
+    border: 1px solid #5a461e;
+    color: #000;
+    padding: 8px 15px;
+    cursor: pointer;
+    font-family: 'Cinzel';
+    font-weight: bold;
+    transition: 0.2s;
+}
+
+button:hover { filter: brightness(1.2); box-shadow: var(--glow); }
+
+.close-text { font-family: 'Cinzel'; color: var(--eso-gold-dim); cursor: pointer; float: right; font-size: 0.8rem; }
+.close-text:hover { color: #fff; }
+
+.character-title, .cinzel-header { font-family: 'Cinzel'; color: var(--eso-gold); margin-top: 0; }
+.stat-row { display: flex; justify-content: space-between; margin-bottom: 5px; }
+
+#almanac-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 5px; margin-top: 10px; }
+.almanac-day { text-align: center; padding: 8px 0; cursor: pointer; transition: 0.3s; }
+.almanac-day:hover { background: rgba(205, 162, 75, 0.2); box-shadow: var(--glow); }
+.almanac-day.today { border: 1px solid var(--eso-gold); }
