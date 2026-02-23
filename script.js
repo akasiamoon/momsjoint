@@ -5,11 +5,11 @@ function updateEnvironment() {
 
     // Put your 3 EXACT image file names inside the quotes below!
     if (hour >= 6 && hour < 17) {
-        bgImage.src = "YOUR_DAY_IMAGE.jpg";      
+        bgImage.src = "momsjointday.jpg";      
     } else if (hour >= 17 && hour < 20) {
-        bgImage.src = "YOUR_SUNSET_IMAGE.jpg";   
+        bgImage.src = "momsjointsunset.jpg";   
     } else {
-        bgImage.src = "YOUR_NIGHT_IMAGE.jpg";    
+        bgImage.src = "momsjointnight.jpg";    
     }
 }
 // Run immediately, then check every hour
