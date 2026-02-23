@@ -12,48 +12,49 @@ function updateClock() {
     document.getElementById('sink-clock').innerText = hours + ':' + minutes + ' ' + ampm;
 }
 setInterval(updateClock, 1000);
-updateClock(); // Initial call
+updateClock();
 
-// --- 2. HEARTH SOUNDSCAPE ---
-const hearthAudio = document.getElementById('hearth-audio');
-let isPlaying = false;
-
-function toggleFireplaceAudio() {
-    if (isPlaying) {
-        hearthAudio.pause();
-    } else {
-        hearthAudio.play();
-    }
-    isPlaying = !isPlaying;
-}
-
-// --- 3. WEATHER & TIME OF DAY (Framework) ---
-// Note: To make this live, you'll need to sign up for a free OpenWeatherMap API key.
-async function updateEnvironment() {
-    // 1. Get current hour to determine day/sunset/night
+// --- 2. ENVIRONMENT & BACKGROUND SWITCHING ---
+function updateEnvironment() {
     const hour = new Date().getHours();
     const bgImage = document.getElementById('bg-image');
 
-    // Example logic for swapping your static images based on time:
-    if (hour >= 6 && hour < 16) {
-        bgImage.src = "image_8cf21b.jpg"; // Day image
-    } else if (hour >= 16 && hour < 19) {
-        bgImage.src = "image_8d759c.jpg"; // Sunset image
+    // Make sure your filenames exactly match the ones in your folder!
+    if (hour >= 6 && hour < 17) {
+        bgImage.src = "image_8cf21b.jpg"; // Day 
+    } else if (hour >= 17 && hour < 20) {
+        bgImage.src = "image_8d759c.jpg"; // Sunset 
     } else {
-        bgImage.src = "image_8d75d6.jpg"; // Night image
+        bgImage.src = "image_8d75d6.jpg"; // Night 
     }
+}
+updateEnvironment();
+setInterval(updateEnvironment, 3600000); // Check every hour
 
-    // 2. Fetch Weather (Placeholder for your future API implementation)
-    // navigator.geolocation.getCurrentPosition() -> fetch OpenWeatherMap API -> trigger rain/snow CSS in #window-zone
+// --- 3. DUAL AUDIO HEARTH SYSTEM ---
+function toggleAudioMenu() {
+    const menu = document.getElementById('audio-menu');
+    // Toggles the 'hidden' CSS class on and off
+    menu.classList.toggle('hidden'); 
 }
 
-updateEnvironment();
-// Check environment every hour
-setInterval(updateEnvironment, 3600000);
+function changeAudio(type) {
+    if (type === 'ambient') {
+        const select = document.getElementById('ambient-select');
+        const player = document.getElementById('ambient-player');
+        player.src = select.value;
+        player.play(); // Auto-play when switched
+    } else if (type === 'primary') {
+        const select = document.getElementById('primary-select');
+        const player = document.getElementById('primary-player');
+        player.src = select.value;
+        player.play();
+    }
+}
 
-// --- 4. HIDDEN LINKS MODAL SYSTEM ---
-function openModal(id) {
-    // This is where we will eventually code the pop-up blogs/ledgers.
-    console.log("Opening interface for: " + id);
-    alert("You clicked " + id + "! (We will build the data interface for this next)");
+// --- 4. HIDDEN LINKS INTERFACE ---
+function openApp(appName) {
+    // We will replace this alert with the actual blog/modal interface later!
+    console.log("Opening: " + appName);
+    alert("Opening the interface for: " + appName);
 }
