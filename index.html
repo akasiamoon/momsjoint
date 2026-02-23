@@ -12,16 +12,16 @@
 <div class="app-wrapper">
     <div class="kitchen-stage">
         
-        <img src="momsjointday.jpg" id="bg-image" alt="Kitchen Environment">
+        <img src="momsjointday.jpg" id="bg-image" alt="Kitchen">
         <div id="seasonal-overlay"></div>
         <div class="atmosphere-overlay"></div>
         <div id="decor-layer"></div>
 
-        <div id="bookshelf-trigger" class="trigger" onclick="togglePanel('bookshelf-panel')" title="Almanac & Market"></div>
-        <div id="hearth-trigger" class="trigger" onclick="togglePanel('audio-menu')" title="Soundscapes"></div>
-        <div id="table-trigger" class="trigger" onclick="openApp('budget-ledger')" title="Budget Ledger"></div>
+        <div id="bookshelf-trigger" class="trigger" onclick="togglePanel('bookshelf-panel')"></div>
+        <div id="hearth-trigger" class="trigger" onclick="togglePanel('audio-menu')"></div>
+        <div id="table-trigger" class="trigger" onclick="openApp('budget-ledger')"></div>
 
-        <div id="weather-orb" title="Current Conditions: Farmington, MS">
+        <div id="weather-orb" onclick="fetchWeather()" title="Click to Refresh Signal">
             <div class="orb-content">
                 <span id="orb-temp">--°</span>
                 <span id="orb-loc">Farmington</span>
@@ -35,15 +35,13 @@
 
         <div id="avatar-corner">
             <div id="avatar-stats-box" class="panel glass hidden">
-                <h2 class="panel-title">Keeper Amber <span class="dismiss" onclick="togglePanel('avatar-stats-box')">Dismiss</span></h2>
-                
-                <div class="stat-row">
-                    <span>Vault Balance</span> 
-                    <span id="vault-balance" style="color: var(--eso-gold); font-weight: bold;">0.00</span>
+                <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #8b6d32; padding-bottom: 5px; margin-bottom: 10px;">
+                    <h2 class="panel-title" style="margin:0; border:none;">Keeper Amber</h2>
+                    <span class="dismiss" onclick="togglePanel('avatar-stats-box')">CLOSE</span>
                 </div>
 
-                <div class="menu-section">
-                    <h3>Quick Logs</h3>
+                <div class="menu-section" style="margin-top: 0; padding-top: 0; border: none;">
+                    <h3 style="color: #cda24b; margin-bottom: 5px;">Quick Logs</h3>
                     <div class="action-grid">
                         <button onclick="openApp('tea-log')">☕ Tea</button>
                         <button onclick="openApp('cat-log')">🐈 Cat</button>
@@ -51,88 +49,12 @@
                         <button onclick="openApp('tripp-journal')">Tripp</button>
                     </div>
                 </div>
+                
+                <div class="stat-row" style="margin-top: 10px;">
+                    <span>Vault Balance</span> 
+                    <span id="vault-balance" style="color: var(--eso-gold); font-weight: bold;">0.00</span>
+                </div>
 
                 <div class="menu-section">
-                    <h3>System</h3>
                     <button onclick="openApp('master-journal')">📖 Open Full Tome</button>
-                    <div class="action-grid">
-                        <button onclick="exportData()">Export</button>
-                        <button onclick="document.getElementById('import-file').click()">Load</button>
-                    </div>
-                    <input type="file" id="import-file" class="hidden" onchange="importData(event)" accept=".json">
-                </div>
-            </div>
-            <img src="avatar.jpg" id="user-avatar" onclick="togglePanel('avatar-stats-box')" alt="Avatar">
-        </div>
-
-        <div id="bookshelf-panel" class="panel glass hidden">
-            <h2 class="panel-title">The Almanac <span class="dismiss" onclick="togglePanel('bookshelf-panel')">Dismiss</span></h2>
-            <div id="almanac-header">
-                <span class="nav-btn" onclick="changeMonth(-1)">Prev</span>
-                <span id="almanac-month-year"></span>
-                <span class="nav-btn" onclick="changeMonth(1)">Next</span>
-            </div>
-            <div id="almanac-grid"></div>
-            <div id="almanac-info" class="panel-section">Select a day...</div>
-            
-            <div class="panel-section">
-                <h3 onclick="toggleSection('market-content')" style="cursor: pointer; border-bottom: 1px solid var(--eso-gold-dim);">Market List</h3>
-                <div id="market-content" class="hidden">
-                    <input type="text" id="market-search" placeholder="Search #tags..." onkeyup="filterList('market')">
-                    <input type="text" id="market-input" placeholder="Add item... (Hit Enter)" onkeypress="handleLog(event, 'market')">
-                    <ul id="market-list"></ul>
-                    <button class="clear-btn" onclick="clearList('market')">Purge List</button>
-                </div>
-            </div>
-        </div>
-
-        <div id="audio-menu" class="panel glass hidden">
-            <h2 class="panel-title">Soundscapes <span class="dismiss" onclick="togglePanel('audio-menu')">Dismiss</span></h2>
-            <div class="audio-grid">
-                <button onclick="playAudio('momsjointfire.mp3')">Hearth Fire</button>
-                <button onclick="playAudio('momsjointthunder.mp3')">Thunder</button>
-                <button onclick="playAudio('momsjointrainforest.mp3')">Rainforest</button>
-                <button onclick="playAudio('momsjointraindrum.mp3')">Rain Drum</button>
-                <button onclick="playAudio('momsjointlightrain.mp3')">Light Rain</button>
-                <button onclick="playAudio('momsjointbeach.mp3')">Beach</button>
-                <button onclick="playAudio('momsjointwhitenoise.mp3')">White Noise</button>
-                <button onclick="playAudio('momsjointdark.mp3')">Dark</button>
-                <button onclick="playAudio('momsjointflute.mp3')">Flute</button>
-            </div>
-            <button onclick="stopAudio()" style="background: #2a0808; border-color: #5a0000; color: #ff6b6b; margin-top: 10px;">Silence All</button>
-        </div>
-
-        <div id="toc-modal" class="modal hidden">
-            <div class="modal-content glass">
-                <h2 class="panel-title">The Tome <span class="dismiss" onclick="togglePanel('toc-modal')">Dismiss</span></h2>
-                <div class="toc-grid">
-                    <button onclick="openApp('objectives')">Objectives (To-Do)</button>
-                    <button onclick="openApp('provisions')">Provisions (Meals)</button>
-                    <button onclick="openApp('budget-ledger')">Budget Ledger</button>
-                    <button onclick="openApp('important-numbers')">Important Numbers</button>
-                    <button onclick="openApp('cory-journal')">Cory</button>
-                    <button onclick="openApp('personal-journal')">Personal Journal</button>
-                </div>
-                <div class="holy-wise-section">
-                    <h3>Daily Wisdom</h3>
-                    <p id="daily-verse">Consulting the heavens...</p>
-                    <p id="daily-affirmation">Drawing strength...</p>
-                </div>
-            </div>
-        </div>
-
-        <div id="app-modal" class="modal hidden">
-            <div class="modal-content glass">
-                <h2 id="modal-title" class="panel-title">App <span class="dismiss" onclick="closeModal()">Dismiss</span></h2>
-                <div id="modal-instructions" class="instruction-text"></div>
-                <textarea id="app-input" placeholder="Inscribe your records here..."></textarea>
-                <button onclick="saveModal()">Inscribe Record</button>
-            </div>
-        </div>
-
-    </div>
-</div>
-
-<script src="script.js"></script>
-</body>
-</html>
+                    <div class
