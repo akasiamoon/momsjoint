@@ -52,9 +52,68 @@ function changeAudio(type) {
     }
 }
 
-// --- 4. HIDDEN LINKS INTERFACE ---
+// --- 4. HIDDEN LINKS INTERFACE (MODAL) ---
+
+// Map your IDs to clean, readable titles
+const appTitles = {
+    'todo': 'To Do List',
+    'weekly-meal-plan': 'Weekly Meal Plan',
+    'calendar': 'Calendar',
+    'market-list': 'Market List',
+    'bible-verse': 'Bible Verse of the Day',
+    'contingency-ledger': 'Contingency Ledger',
+    'recipes': 'Recipes',
+    'dev-ideas': 'Web App & Gaming Dev Ideas',
+    'mood-log': 'Mood Log',
+    'budget-ledger': 'Budget Ledger',
+    'notes': 'Notes',
+    'sleep-log': 'Sleep Log',
+    'meal-log': 'Meal Log',
+    'water-log': 'Water Log',
+    'self-care-log': 'Self Care Log',
+    'phoebe': 'Phoebe',
+    'tripp': 'Tripp',
+    'cory': 'Cory'
+};
+
+// Temporary storage memory so your text doesn't disappear immediately
+const appData = {};
+
 function openApp(appName) {
-    // We will replace this alert with the actual blog/modal interface later!
-    console.log("Opening: " + appName);
-    alert("Opening the interface for: " + appName);
+    const modal = document.getElementById('app-modal');
+    const title = document.getElementById('modal-title');
+    const body = document.getElementById('modal-body');
+
+    // 1. Set the correct title
+    title.innerText = appTitles[appName];
+
+    // 2. Tell the modal which app is currently open (so the save button knows)
+    modal.setAttribute('data-current-app', appName);
+
+    // 3. Load previously typed data if it exists
+    let savedText = appData[appName] || '';
+    
+    // 4. Inject a text area for logging
+    body.innerHTML = `
+        <textarea id="app-input" placeholder="Start typing your ${appTitles[appName].toLowerCase()} here...">${savedText}</textarea>
+    `;
+
+    // 5. Unhide the modal
+    modal.classList.remove('hidden');
+}
+
+function closeModal() {
+    document.getElementById('app-modal').classList.add('hidden');
+}
+
+function saveModalData() {
+    const modal = document.getElementById('app-modal');
+    const currentApp = modal.getAttribute('data-current-app');
+    const inputData = document.getElementById('app-input').value;
+
+    // Save the typed text to our memory object
+    appData[currentApp] = inputData;
+    
+    alert(appTitles[currentApp] + ' saved successfully!');
+    closeModal();
 }
