@@ -1,87 +1,108 @@
+/* --- 1. CORE SYSTEM --- */
 :root {
     --eso-gold: #cda24b;
     --eso-gold-dim: #8b6d32;
-    --parchment: rgba(15, 12, 8, 0.98);
-    --text-main: #e0d8c8; /* Creamy white for readability */
+    --parchment: rgba(12, 10, 7, 0.98);
+    --text-cream: #e0d8c8;
 }
 
-/* --- THE CHARACTER SHEET (Avatar Menu) --- */
+* { box-sizing: border-box; }
+
+body, html {
+    margin: 0; padding: 0; 
+    width: 100vw; height: 100vh; 
+    background: #000; 
+    overflow: hidden; 
+    font-family: 'Cormorant Garamond', serif;
+}
+
+.app-container {
+    position: relative;
+    width: 100vw; height: 100vh;
+}
+
+/* --- 2. THE BACKGROUND (Anti-Zoom Fix) --- */
+#bg-image {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    object-fit: cover; /* This makes the image fit without the massive zoom */
+    z-index: 1;
+}
+
+/* --- 3. THE CHARACTER SHEET & STATS --- */
 #avatar-corner {
     position: absolute;
-    bottom: 3%; right: 2%;
+    bottom: 25px; right: 25px;
     z-index: 100;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-end;
+    display: flex; flex-direction: column; align-items: flex-end;
 }
 
 #avatar-stats-box {
     width: 280px;
     padding: 20px;
-    margin-bottom: 10px;
+    margin-bottom: 12px;
     background: var(--parchment);
     border: 2px solid var(--eso-gold);
-    backdrop-filter: blur(10px);
-    box-shadow: 0 10px 30px rgba(0,0,0,0.9);
-    color: var(--text-main); /* FIX: Light text on dark background */
+    backdrop-filter: blur(15px);
+    box-shadow: 0 10px 40px rgba(0,0,0,1);
+    color: var(--text-cream) !important;
 }
 
-.stat-row { 
-    display: flex; 
-    justify-content: space-between; 
-    margin-bottom: 8px; 
-    border-bottom: 1px solid rgba(205, 162, 75, 0.2);
+#avatar-stats-box h2 { font-family: 'Cinzel'; color: var(--eso-gold); margin-top: 0; border-bottom: 1px solid var(--eso-gold-dim); padding-bottom: 10px; }
+
+.stat-row { display: flex; justify-content: space-between; margin: 10px 0; font-size: 1.1rem; }
+
+#user-avatar {
+    width: 130px; height: 130px;
+    border-radius: 50%;
+    border: 3px solid var(--eso-gold);
+    cursor: pointer;
+    box-shadow: 0 0 20px #000;
+    transition: 0.3s ease;
 }
 
-.character-title { 
-    font-family: 'Cinzel'; 
-    color: var(--eso-gold); 
-    margin-top: 0; 
-    border-bottom: 1px solid var(--eso-gold);
-    padding-bottom: 5px;
+#user-avatar:hover { transform: scale(1.05); box-shadow: 0 0 15px var(--eso-gold); }
+
+/* --- 4. THE ALMANAC (Calendar Fix) --- */
+#bookshelf-panel {
+    position: absolute;
+    top: 5%; left: 3%;
+    width: 310px;
+    padding: 20px;
+    z-index: 50;
+    background: var(--parchment);
+    border: 2px solid var(--eso-gold);
 }
 
-/* --- THE ALMANAC (Calendar) --- */
-#almanac-grid {
-    display: grid;
-    grid-template-columns: repeat(7, 1fr);
-    gap: 4px;
-    margin-top: 10px;
-    min-height: 150px; /* Ensure it doesn't collapse */
-}
+#almanac-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 5px; margin-top: 15px; }
 
 .almanac-day {
-    text-align: center;
-    padding: 8px 0;
-    color: var(--text-main); /* FIX: Visible numbers */
-    cursor: pointer;
-    border: 1px solid transparent;
+    text-align: center; padding: 8px 0; color: var(--text-cream);
+    cursor: pointer; font-family: 'Cinzel'; transition: 0.2s;
 }
 
-.almanac-day:hover {
-    background: rgba(205, 162, 75, 0.2);
-    border-color: var(--eso-gold);
+.almanac-day:hover { background: rgba(205, 162, 75, 0.2); }
+.almanac-day.today { background: var(--eso-gold); color: #000; font-weight: bold; }
+
+/* --- 5. FIXED CLOCK --- */
+#sink-clock {
+    position: absolute;
+    top: 61%; right: 26.5%;
+    color: var(--eso-gold);
+    font-family: 'Cinzel', serif;
+    font-size: 2.2vw;
+    text-shadow: 0 0 12px #000;
+    z-index: 20;
+    pointer-events: none;
 }
 
-.almanac-day.today {
-    color: #000;
-    background: var(--eso-gold);
-    font-weight: bold;
-}
-
-/* --- BUTTONS --- */
+/* --- 6. BUTTONS --- */
 button {
     background: linear-gradient(to bottom, #cda24b, #8b6d32);
     border: 1px solid #332811;
-    color: #1a1a1a; /* Dark text on Gold buttons is okay */
-    font-family: 'Cinzel';
-    font-weight: bold;
-    padding: 8px 12px;
-    cursor: pointer;
-    width: 100%;
-    margin-top: 5px;
+    color: #000 !important;
+    padding: 10px; font-family: 'Cinzel'; font-weight: bold; cursor: pointer;
 }
-
-button:hover { filter: brightness(1.2); }
 
 .hidden { display: none !important; }
