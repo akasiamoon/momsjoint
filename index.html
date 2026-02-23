@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cozy Kitchen Dashboard</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="app-container">
+    <img src="image_8cf21b.jpg" alt="Cozy Kitchen" id="bg-image">
+
+    <div id="window-zone"></div>
+    
+    <div id="sink-clock">00:00</div>
+
+    <div id="avatar-corner">
+        <button id="save-btn">💾 Save Data</button>
+        <div id="account-balance">Balance: $0.00</div>
+        <div id="daily-info">Loading today's info...</div>
+    </div>
+
+    <div id="hearth-zone" onclick="toggleFireplaceAudio()" title="Play Soundscape"></div>
+    <audio id="hearth-audio" loop>
+        <source src="fire-crackling.mp3" type="audio/mpeg"> 
+    </audio>
+
+    <div class="hidden-link" id="link-todo" title="To Do List" onclick="openModal('todo')"></div>
+    <div class="hidden-link" id="link-meal-plan" title="Weekly Meal Plan" onclick="openModal('mealplan')"></div>
+    <div class="hidden-link" id="link-recipe-book" title="Recipes" onclick="openModal('recipes')"></div>
+    </div>
+
+<script src="script.js"></script>
+</body>
+</html>
