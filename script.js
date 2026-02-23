@@ -1,4 +1,13 @@
-let appData = JSON.parse(localStorage.getItem('cozyKitchenSave')) || {};
+// --- CONFIGURATION ---
+const WEATHER_API_KEY = "833c12742186f3ca3e693f0507a09ec0"; 
+const ZIP_CODE = "38834"; 
+
+// --- IMAGE FILENAMES ---
+const IMAGES = {
+    day: "momsjointday.jpg",
+    sunset: "momsjointsunset.jpg",
+    night: "momsjointnight.jpg"
+};let appData = JSON.parse(localStorage.getItem('cozyKitchenSave')) || {};
 const lists = ['marketList', 'notesList', 'todoList'];
 lists.forEach(l => { if (!appData[l]) appData[l] = []; });
 if (!appData.appointments) appData.appointments = {};
