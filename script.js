@@ -1,5 +1,5 @@
 // --- CONFIGURATION ---
-const WEATHER_API_KEY = "833c12742186f3ca3e693f0507a09ec0"; 
+const WEATHER_API_KEY = "88f3e35af62ba59bad38a3d346e0ca84"; 
 const ZIP_CODE = "38834"; 
 
 // --- IMAGE FILENAMES ---
