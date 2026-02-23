@@ -78,7 +78,7 @@
 
     <div id="audio-menu" class="hidden">
         <h3>Hearth Soundscapes</h3>
-        <div class="audio-section">
+       <div class="atmosphere-overlay"></div>
             <label>Ambient Noise:</label>
             <select id="ambient-select" onchange="changeAudio('ambient')">
                 <option value="fire.mp3">Crackling Fire</option>
@@ -88,17 +88,8 @@
             <audio id="ambient-player" loop controls><source src="fire.mp3" type="audio/mpeg"></audio>
         </div>
         <div class="audio-section">
-            <label>Primary Audio:</label>
-            <select id="primary-select" onchange="changeAudio('primary')">
-                <option value="lofi.mp3">Lofi Beats</option>
-                <option value="audiobook.mp3">Audiobook</option>
-                <option value="bard.mp3">Tavern Bard</option>
-            </select>
-            <<audio id="ambient-player" loop></audio>
+    <audio id="ambient-player" loop></audio>
 <audio id="primary-player"></audio>
-        </div>
-        <button class="close-toc" onclick="toggleAudioMenu()">Close</button>
-    </div>
 
     <div id="window-zone"></div>
     <div id="sink-clock">00:00</div>
