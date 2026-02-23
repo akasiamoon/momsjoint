@@ -128,7 +128,7 @@ const API = "833c12742186f3ca3e693f0507a09ec0"; // Removed the 'Y' at the start
 const ZIP = "38834";
 
 async function upWeather() {
-    if (API === "YOUR_API_KEY" || API.length < 10) return;
+    if (API === "833c12742186f3ca3e693f0507a09ec0" || API.length < 10) return;
     
     try {
         const r = await fetch(`https://api.openweathermap.org/data/2.5/weather?zip=${ZIP},US&appid=${API}`);
