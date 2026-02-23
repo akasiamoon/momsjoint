@@ -71,39 +71,39 @@ body, html {
 #avatar-corner {
     position: absolute;
     bottom: 2%;
-    left: 2%;
+    right: 2%; /* MOVED: Now on the bottom right */
     z-index: 20;
     display: flex; 
     flex-direction: column;
+    align-items: flex-end; /* Ensures the pop-up menu anchors to the right */
 }
 
 #user-avatar {
-    width: 90px;
-    height: 90px;
+    width: 130px; /* BIGGER: Was 90px */
+    height: 130px; /* BIGGER: Was 90px */
     border-radius: 50%;
     border: 3px solid #d4af37;
     object-fit: cover;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.8);
-    cursor: pointer; /* Makes it look like a button when you hover */
-    transition: transform 0.2s ease; /* Smooth hover animation */
+    cursor: pointer; 
+    transition: transform 0.2s ease; 
 }
 
-/* Gives the avatar a little "pop" when you hover over it */
 #user-avatar:hover {
     transform: scale(1.05);
 }
 
 #avatar-stats-box {
     position: absolute;
-    bottom: 110px; /* Pops up exactly above the avatar image */
-    left: 0;
+    bottom: 150px; /* ADJUSTED: Popped up higher to clear the new, bigger avatar */
+    right: 0; /* MOVED: Anchors the box to the right side */
     width: 240px;
     background: rgba(20, 20, 20, 0.5); 
     backdrop-filter: blur(10px); 
     -webkit-backdrop-filter: blur(10px); 
     border: 1px solid rgba(212, 175, 55, 0.3); 
     border-radius: 12px;
-    padding: 15px; /* Removed the giant top padding since they don't overlap anymore */
+    padding: 15px; 
     box-sizing: border-box; 
     color: white;
     box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.6); 
