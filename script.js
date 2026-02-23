@@ -65,58 +65,127 @@ function toggleAvatarMenu() {
     document.getElementById('avatar-stats-box').classList.toggle('hidden');
 }
 
-// --- BOOKSHELF: CALENDAR ---
-function renderCalendar() {
-    const now = new Date();
-    const monthYear = now.toLocaleString('default', { month: 'long', year: 'numeric' });
-    document.getElementById('month-year-display').innerText = monthYear;
+// --- THE ALMANAC ENGINE ---
+let currentAlmanacDate = new Date();
 
-    const grid = document.getElementById('calendar-grid');
-    grid.innerHTML = ''; // Clear existing
+// A dictionary of fixed real-world and seasonal events
+const staticHolidays = {
+    "1-1": "New Year's Day",
+    "2-2": "Imbolc", 
+    "2-14": "Valentine's Day",
+    "3-17": "St. Patrick's Day",
+    "3-20": "Vernal Equinox",
+    "5-1": "Beltane",
+    "5-26": "My Birthday",
+    "6-20": "Summer Solstice",
+    "7-4": "Independence Day",
+    "8-1": "Lughnasadh",
+    "9-22": "Autumnal Equinox",
+    "10-31": "Halloween / Samhain",
+    "11-11": "Veterans Day",
+    "12-21": "Winter Solstice",
+    "12-25": "Christmas Day",
+    "12-31": "New Year's Eve"
+};
+
+// Calculates the actual moon phase for any given date!
+function getMoonPhase(year, month, day) {
+    let c = 0, e = 0, jd = 0, b = 0;
+    if (month < 3) { year--; month += 12; }
+    ++month;
+    c = 365.25 * year;
+    e = 30.6 * month;
+    jd = c + e + day - 694039.09; 
+    jd /= 29.5305882; 
+    b = parseInt(jd); 
+    jd -= b; 
+    b = Math.round(jd * 8); 
+    if (b >= 8) b = 0;
+    const phases = ['New Moon', 'Waxing Crescent', 'First Quarter', 'Waxing Gibbous', 'Full Moon', 'Waning Gibbous', 'Last Quarter', 'Waning Crescent'];
+    return phases[b];
+}
+
+function renderAlmanac() {
+    const year = currentAlmanacDate.getFullYear();
+    const month = currentAlmanacDate.getMonth();
     
-    // Simplistic calendar math for the current month
-    const daysInMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0).getDate();
-    const today = now.getDate();
+    document.getElementById('almanac-month-year').innerText = currentAlmanacDate.toLocaleString('default', { month: 'long', year: 'numeric' });
 
+    const grid = document.getElementById('almanac-grid');
+    grid.innerHTML = ''; 
+    
+    const daysInMonth = new Date(year, month + 1, 0).getDate();
+    const firstDayIndex = new Date(year, month, 1).getDay();
+    const today = new Date();
+
+    // Fill empty spots before the 1st of the month
+    for (let x = 0; x < firstDayIndex; x++) {
+        const emptyDiv = document.createElement('div');
+        grid.appendChild(emptyDiv);
+    }
+
+    // Render the actual days
     for (let i = 1; i <= daysInMonth; i++) {
         const dayDiv = document.createElement('div');
-        dayDiv.className = 'cal-day';
+        dayDiv.className = 'almanac-day';
         dayDiv.innerText = i;
 
-        if (i < today) {
-            dayDiv.classList.add('past-day');
-        } else if (i === today) {
-            dayDiv.classList.add('current-day');
+        // Highlight the current day
+        if (i === today.getDate() && month === today.getMonth() && year === today.getFullYear()) {
+            dayDiv.classList.add('today');
         }
 
-        // Check if there is a saved appointment for this day
-        const dateKey = `${now.getFullYear()}-${now.getMonth()+1}-${i}`;
-        if (appData.appointments[dateKey]) {
-            dayDiv.classList.add('has-appt');
-            dayDiv.title = appData.appointments[dateKey]; // Hover to see appt
+        const dateKey = `${month + 1}-${i}`; // Format: MM-DD
+        const fullDateKey = `${year}-${month + 1}-${i}`; // Format: YYYY-MM-DD
+        
+        // Check if there is a Holiday OR a saved user appointment
+        let hasEvent = staticHolidays[dateKey] || appData.appointments[fullDateKey];
+        if (hasEvent) {
+            dayDiv.classList.add('has-event');
         }
 
-        // Allow clicking future/current days to add an appointment
-        if (i >= today) {
-            dayDiv.onclick = () => setAppointment(dateKey, i);
-        }
+        // When clicked, calculate moon phase and display details
+        dayDiv.onclick = () => {
+            const phase = getMoonPhase(year, month, i);
+            let displayHTML = `<span class="highlight">${currentAlmanacDate.toLocaleString('default', { month: 'long' })} ${i}, ${year}</span>`;
+            displayHTML += `Moon Phase: ${phase}<br>`;
+            
+            if (staticHolidays[dateKey]) {
+                displayHTML += `<br><span class="highlight">${staticHolidays[dateKey]}</span>`;
+            }
+            if (appData.appointments[fullDateKey]) {
+                displayHTML += `<br>Record: ${appData.appointments[fullDateKey]}`;
+            }
+
+            document.getElementById('almanac-info').innerHTML = displayHTML;
+            
+            // Allow user to add/edit their own record for this day
+            if (i >= today.getDate() || month > today.getMonth() || year > today.getFullYear()) {
+                setTimeout(() => setAppointment(fullDateKey, i, month), 100); 
+            }
+        };
 
         grid.appendChild(dayDiv);
     }
 }
 
-function setAppointment(dateKey, day) {
-    const currentAppt = appData.appointments[dateKey] || '';
-    const newAppt = prompt(`Enter appointment for day ${day}:`, currentAppt);
+function changeMonth(direction) {
+    currentAlmanacDate.setMonth(currentAlmanacDate.getMonth() + direction);
+    renderAlmanac();
+}
+
+function setAppointment(fullDateKey, day, month) {
+    const currentAppt = appData.appointments[fullDateKey] || '';
+    const newAppt = prompt(`Inscribe a record for ${month + 1}/${day}:`, currentAppt);
     
     if (newAppt !== null) {
         if (newAppt.trim() === '') {
-            delete appData.appointments[dateKey]; // Clear it if empty
+            delete appData.appointments[fullDateKey]; 
         } else {
-            appData.appointments[dateKey] = newAppt;
+            appData.appointments[fullDateKey] = newAppt;
         }
         saveCoreData();
-        renderCalendar(); // Re-draw to show the gold glow!
+        renderAlmanac(); 
     }
 }
 
