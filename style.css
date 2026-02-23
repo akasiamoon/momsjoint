@@ -1,33 +1,56 @@
-:root { --eso-gold: #cda24b; --eso-dark: rgba(15, 15, 15, 0.9); }
-body { margin: 0; background: #000; font-family: 'Cormorant Garamond', serif; color: #e0d8c8; }
-.app-container { position: relative; width: 100%; max-width: 1200px; margin: 0 auto; overflow: hidden; }
-#bg-image { width: 100%; display: block; }
-
-/* Atmosphere Overlay */
-.atmosphere-overlay {
-    position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-    pointer-events: none; z-index: 5;
-    background: radial-gradient(circle at 50% 50%, rgba(205, 162, 75, 0.05), transparent);
-    animation: breathe 8s infinite ease-in-out;
+/* --- ESO CORE STYLES --- */
+:root {
+    --eso-gold: #cda24b;
+    --eso-gold-dim: #8b6d32;
+    --eso-dark: rgba(15, 15, 15, 0.92);
+    --glow: 0 0 15px rgba(205, 162, 75, 0.5);
 }
-@keyframes breathe { 0%, 100% { opacity: 0.3; } 50% { opacity: 0.6; } }
 
-/* Click Zones */
-#bookshelf-trigger { position: absolute; top: 5%; left: 3%; width: 20%; height: 60%; z-index: 10; cursor: pointer; }
-#bookshelf-panel { position: absolute; top: 5%; left: 3%; width: 280px; background: var(--eso-dark); border: 1px solid var(--eso-gold); padding: 15px; z-index: 20; }
+body, html {
+    margin: 0; padding: 0; width: 100%; height: 100%;
+    background-color: #000;
+    font-family: 'Cormorant Garamond', serif;
+    color: #e0d8c8;
+    overflow: hidden;
+}
 
-/* Almanac & Lists */
-.hidden { display: none; }
-#almanac-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 2px; }
-.almanac-day { padding: 5px; text-align: center; cursor: pointer; border: 1px solid transparent; }
-.almanac-day:hover { border-color: var(--eso-gold); box-shadow: 0 0 10px var(--eso-gold); }
-#sink-clock { position: absolute; top: 60%; right: 25%; color: var(--eso-gold); font-size: 2vw; font-family: 'Cinzel'; }
+.app-container {
+    position: relative;
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    overflow: hidden;
+}
 
-/* Gold Glow To-Do */
-.todo-item { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
-.checkmark { width: 18px; height: 18px; border: 1px solid var(--eso-gold); display: inline-block; transition: 0.3s; }
-input:checked + .checkmark { background: var(--eso-gold); box-shadow: 0 0 10px var(--eso-gold); }
+#bg-image {
+    width: 100%;
+    display: block;
+    z-index: 1;
+}
 
-/* Modals */
-#app-modal { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 100; display: flex; justify-content: center; align-items: center; }
-.modal-content { background: var(--eso-dark); border: 1px solid var(--eso-gold); padding: 20px; width: 80%; max-width: 500px; }
+/* --- ATMOSPHERE & SHIMMER --- */
+.atmosphere-overlay {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    pointer-events: none;
+    z-index: 5;
+    background: radial-gradient(circle at 50% 50%, rgba(205, 162, 75, 0.05), transparent);
+    animation: roomBreathe 10s ease-in-out infinite;
+}
+
+@keyframes roomBreathe {
+    0%, 100% { opacity: 0.3; transform: scale(1); }
+    50% { opacity: 0.7; transform: scale(1.01); }
+}
+
+/* --- CLICK ZONES --- */
+#bookshelf-trigger, #hearth-trigger, #table-trigger {
+    position: absolute;
+    z-index: 10;
+    cursor: pointer;
+}
+
+#bookshelf-trigger { top: 5%; left: 3%; width: 20%; height: 60%; }
+#hearth-trigger { top: 45%; left: 20%; width: 15%; height: 25%; }
+#table-trigger { bottom: 10%; right: 25%; width
