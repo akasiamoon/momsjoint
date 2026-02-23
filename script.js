@@ -108,17 +108,49 @@ function importData(e) {
     r.readAsText(e.target.files[0]);
 }
 
-// WEATHER & BACKGROUND
+// --- ENVIRONMENT & WEATHER ENGINES ---
 function updateEnv() {
-    const h = new Date().getHours(), img = document.getElementById('bg-image');
-    img.src = h >= 6 && h < 17 ? "momsjointday.jpg" : h >= 17 && h < 20 ? "momsjointsunset.jpg" : "momsjointnight.jpg";
+    const h = new Date().getHours();
+    const img = document.getElementById('bg-image');
+    if (!img) return;
+
+    // Use your specific filename for all 3 while testing to ensure it shows up
+    const mainImg = "Moonshearthfinal.jpg"; 
+    
+    if (h >= 6 && h < 17) img.src = mainImg;      
+    else if (h >= 17 && h < 20) img.src = mainImg;   
+    else img.src = mainImg;    
 }
 updateEnv();
-const API = "Y833c12742186f3ca3e693f0507a09ec0", ZIP = "38834";
+
+// Update with your actual Key and Zip
+const API = "833c12742186f3ca3e693f0507a09ec0"; // Removed the 'Y' at the start
+const ZIP = "38834";
+
 async function upWeather() {
-    if (API === "YOUR_API_KEY") return;
-    const r = await fetch(`https://api.openweathermap.org/data/2.5/weather?zip=${ZIP},US&appid=${API}`);
-    const d = await r.json(), w = d.weather[0].main, z = document.getElementById('window-zone');
-    z.className = w === "Rain" ? "weather-rain" : w === "Snow" ? "weather-snow" : "";
+    if (API === "YOUR_API_KEY" || API.length < 10) return;
+    
+    try {
+        const r = await fetch(`https://api.openweathermap.org/data/2.5/weather?zip=${ZIP},US&appid=${API}`);
+        const d = await r.json();
+        
+        // Safety Check: If the API sends an error, don't crash!
+        if (d.cod !== 200) {
+            console.warn("Weather API message:", d.message);
+            return;
+        }
+
+        const w = d.weather[0].main; 
+        const z = document.getElementById('window-zone');
+        if (!z) return;
+
+        z.className = ""; // Reset
+        if (w === "Rain" || w === "Drizzle") z.classList.add("weather-rain");
+        if (w === "Snow") z.classList.add("weather-snow");
+
+    } catch (err) {
+        console.error("Weather failed to load, but the hearth is still warm:", err);
+    }
 }
 upWeather();
+setInterval(upWeather, 900000);
