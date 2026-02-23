@@ -10,12 +10,12 @@
 <body>
 
 <div class="app-container">
-    <img src="momsjointdawn.jpg" alt="Cozy Kitchen" id="bg-image">
+    <img src="image_8cf21b.jpg" alt="Cozy Kitchen" id="bg-image">
 
     <div id="table-zone" onclick="openApp('contingency-ledger')" title="Open Contingency Ledger"></div>
+    <div id="bookshelf-trigger" onclick="toggleBookshelf()" title="Open Almanac & Lists"></div>
 
-    <div id="bookshelf-panel">
-        
+    <div id="bookshelf-panel" class="hidden">
         <div class="almanac-section">
             <h2 class="almanac-title">The Almanac</h2>
             <div id="almanac-header">
@@ -26,30 +26,25 @@
             <div class="almanac-weekdays">
                 <span>S</span><span>M</span><span>T</span><span>W</span><span>T</span><span>F</span><span>S</span>
             </div>
-            <div id="almanac-grid">
-                </div>
+            <div id="almanac-grid"></div>
             <div id="almanac-details">
                 <p id="almanac-info">Select a day to view its records.</p>
             </div>
         </div>
 
         <div class="panel-section">
-            <h3 class="collapsible-header" onclick="toggleSection('market-content')">
-                Market List <span class="arrow">▼</span>
-            </h3>
+            <h3 class="collapsible-header" onclick="toggleSection('market-content')">Market List <span class="arrow">▼</span></h3>
             <div id="market-content" class="collapsible-content">
-                <input type="text" id="market-input" placeholder="Type and press Enter..." onkeypress="handleEnter(event, 'market')">
+                <input type="text" id="market-input" placeholder="Inscribe item..." onkeypress="handleEnter(event, 'market')">
                 <ul id="market-list"></ul>
                 <button class="clear-btn" onclick="clearList('market')">Clear List</button>
             </div>
         </div>
 
         <div class="panel-section">
-            <h3 class="collapsible-header" onclick="toggleSection('notes-content')">
-                Notes <span class="arrow">▼</span>
-            </h3>
+            <h3 class="collapsible-header" onclick="toggleSection('notes-content')">Notes <span class="arrow">▼</span></h3>
             <div id="notes-content" class="collapsible-content">
-                <input type="text" id="notes-input" placeholder="Type and press Enter..." onkeypress="handleEnter(event, 'notes')">
+                <input type="text" id="notes-input" placeholder="Inscribe note..." onkeypress="handleEnter(event, 'notes')">
                 <ul id="notes-list"></ul>
                 <button class="clear-btn" onclick="clearList('notes')">Clear Notes</button>
             </div>
@@ -81,44 +76,39 @@
         <button class="close-toc" onclick="toggleTOC()">Close</button>
     </div>
 
-    <div id="window-zone"></div>
-    <div id="sink-clock">00:00</div>
-    
-    <div id="hearth-zone" onclick="toggleAudioMenu()" title="Open Soundscapes"></div>
-    
     <div id="audio-menu" class="hidden">
         <h3>Hearth Soundscapes</h3>
         <div class="audio-section">
-            <label for="ambient-select">Ambient Noise:</label>
+            <label>Ambient Noise:</label>
             <select id="ambient-select" onchange="changeAudio('ambient')">
                 <option value="fire.mp3">Crackling Fire</option>
                 <option value="rain.mp3">Rainstorm</option>
                 <option value="tavern.mp3">Busy Tavern</option>
             </select>
-            <audio id="ambient-player" loop controls>
-                <source src="fire.mp3" type="audio/mpeg">
-            </audio>
+            <audio id="ambient-player" loop controls><source src="fire.mp3" type="audio/mpeg"></audio>
         </div>
         <div class="audio-section">
-            <label for="primary-select">Primary Audio:</label>
+            <label>Primary Audio:</label>
             <select id="primary-select" onchange="changeAudio('primary')">
                 <option value="lofi.mp3">Lofi Beats</option>
-                <option value="audiobook.mp3">Current Audiobook</option>
+                <option value="audiobook.mp3">Audiobook</option>
                 <option value="bard.mp3">Tavern Bard</option>
             </select>
-            <audio id="primary-player" controls>
-                <source src="lofi.mp3" type="audio/mpeg">
-            </audio>
+            <audio id="primary-player" controls><source src="lofi.mp3" type="audio/mpeg"></audio>
         </div>
-        <button class="close-toc" onclick="toggleAudioMenu()">Close Menu</button>
+        <button class="close-toc" onclick="toggleAudioMenu()">Close</button>
     </div>
+
+    <div id="window-zone"></div>
+    <div id="sink-clock">00:00</div>
+    <div id="hearth-zone" onclick="toggleAudioMenu()"></div>
     
     <div id="avatar-corner">
-        <img src="avatar.jpg" alt="My Avatar" id="user-avatar" onclick="toggleAvatarMenu()">
+        <img src="my-avatar.png" alt="My Avatar" id="user-avatar" onclick="toggleAvatarMenu()">
         <div id="avatar-stats-box" class="hidden">
             <div class="avatar-buttons">
-                <button id="save-btn" onclick="exportData()">💾 Export</button>
-                <button id="load-btn" onclick="document.getElementById('import-file').click()">📂 Load</button>
+                <button onclick="exportData()">💾 Export</button>
+                <button onclick="document.getElementById('import-file').click()">📂 Load</button>
                 <input type="file" id="import-file" style="display: none;" onchange="importData(event)" accept=".json">
             </div>
             <div id="account-balance">Vault Balance: $0.00</div>
@@ -133,12 +123,9 @@
                 <span class="close-btn" onclick="closeModal()">&times;</span>
             </div>
             <div id="modal-body"></div>
-            <div class="modal-footer">
-                <button onclick="saveModalData()">Inscribe to Ledger</button>
-            </div>
+            <div class="modal-footer"><button onclick="saveModalData()">Inscribe to Ledger</button></div>
         </div>
     </div>
-
 </div>
 
 <script src="script.js"></script>
