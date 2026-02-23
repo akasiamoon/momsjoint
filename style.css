@@ -67,26 +67,26 @@ body, html {
     pointer-events: none; 
 }
 
-/* --- AVATAR CORNER --- */
+/* --- AVATAR CORNER (Right Side & Bigger) --- */
 #avatar-corner {
     position: absolute;
     bottom: 2%;
-    right: 2%; /* MOVED: Now on the bottom right */
+    right: 2%; /* Moved to the right side */
     z-index: 20;
     display: flex; 
     flex-direction: column;
-    align-items: flex-end; /* Ensures the pop-up menu anchors to the right */
+    align-items: flex-end; /* Aligns the menu to the right edge with the avatar */
 }
 
 #user-avatar {
-    width: 130px; /* BIGGER: Was 90px */
-    height: 130px; /* BIGGER: Was 90px */
+    width: 140px; /* Increased from 90px */
+    height: 140px; /* Increased from 90px */
     border-radius: 50%;
-    border: 3px solid #d4af37;
+    border: 4px solid #d4af37; /* Slightly thicker border for the bigger size */
     object-fit: cover;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.8);
-    cursor: pointer; 
-    transition: transform 0.2s ease; 
+    cursor: pointer;
+    transition: transform 0.2s ease;
 }
 
 #user-avatar:hover {
@@ -95,9 +95,11 @@ body, html {
 
 #avatar-stats-box {
     position: absolute;
-    bottom: 150px; /* ADJUSTED: Popped up higher to clear the new, bigger avatar */
-    right: 0; /* MOVED: Anchors the box to the right side */
-    width: 240px;
+    bottom: 160px; /* Moved up to clear the larger avatar head */
+    right: 0; /* Aligns menu with the right side of the avatar */
+    width: 260px; /* Slightly wider to fit the text better */
+    
+    /* Glassmorphism Styles */
     background: rgba(20, 20, 20, 0.5); 
     backdrop-filter: blur(10px); 
     -webkit-backdrop-filter: blur(10px); 
@@ -107,6 +109,7 @@ body, html {
     box-sizing: border-box; 
     color: white;
     box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.6); 
+    
     display: flex;
     flex-direction: column;
     gap: 12px;
@@ -115,11 +118,6 @@ body, html {
 #avatar-stats-box.hidden {
     display: none;
 }
-    
-    /* THE GLASSMORPHISM MAGIC: Blurs whatever is behind this box */
-    backdrop-filter: blur(10px); 
-    -webkit-backdrop-filter: blur(10px); /* For Safari support */
-    
     border: 1px solid rgba(212, 175, 55, 0.3); /* Made the border a bit softer */
     border-radius: 12px;
     padding: 50px 15px 15px 15px; 
