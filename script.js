@@ -1,25 +1,54 @@
-// --- STATE & SAVE DATA ---
-let appData = JSON.parse(localStorage.getItem('cozyKitchenSave')) || {};
+// --- 1. TIME OF DAY BACKGROUND SWITCHING (The Room) ---
+function updateEnvironment() {
+    const hour = new Date().getHours();
+    const bgImage = document.getElementById('bg-image');
 
-// Initialize lists if they don't exist yet
-if (!appData.marketList) appData.marketList = [];
-if (!appData.notesList) appData.notesList = [];
-if (!appData.appointments) appData.appointments = {}; 
+    // Put your 3 EXACT image file names inside the quotes below!
+    if (hour >= 6 && hour < 17) {
+        bgImage.src = "YOUR_DAY_IMAGE.jpg";      
+    } else if (hour >= 17 && hour < 20) {
+        bgImage.src = "YOUR_SUNSET_IMAGE.jpg";   
+    } else {
+        bgImage.src = "YOUR_NIGHT_IMAGE.jpg";    
+    }
+}
+// Run immediately, then check every hour
+updateEnvironment();
+setInterval(updateEnvironment, 3600000); 
 
-const appTitles = {
-    'contingency-ledger': 'Contingency Ledger',
-    'todo': 'To Do List', 'weekly-meal-plan': 'Weekly Meal Plan', 'bible-verse': 'Bible Verse of the Day',
-    'recipes': 'Recipes', 'dev-ideas': 'Web App & Gaming Dev Ideas', 'mood-log': 'Mood Log',
-    'budget-ledger': 'Budget Ledger', 'sleep-log': 'Sleep Log', 'meal-log': 'Meal Log',
-    'water-log': 'Water Log', 'self-care-log': 'Self Care Log', 'phoebe': 'Phoebe', 'tripp': 'Tripp', 'cory': 'Cory'
-};
 
-window.onload = function() {
-    updateClock();
-    renderCalendar();
-    renderList('market');
-    renderList('notes');
-};
+// --- 2. LIVE WEATHER API (The Window Only) ---
+const WEATHER_API_KEY = "YOUR_API_KEY_HERE"; 
+const ZIP_CODE = "YOUR_ZIP_CODE"; 
+
+async function updateWeatherWindow() {
+    if (WEATHER_API_KEY === "YOUR_API_KEY_HERE") return; 
+
+    try {
+        const response = await fetch(`https://api.openweathermap.org/data/2.5/weather?zip=${ZIP_CODE},US&appid=${WEATHER_API_KEY}&units=imperial`);
+        const data = await response.json();
+        const weatherCondition = data.weather[0].main; 
+
+        const windowZone = document.getElementById('window-zone');
+        
+        // Strip away any old weather effects first
+        windowZone.className = ''; 
+
+        // Add the specific CSS class for the window animation
+        if (weatherCondition === "Rain" || weatherCondition === "Drizzle" || weatherCondition === "Thunderstorm") {
+            windowZone.classList.add("weather-rain");
+        } else if (weatherCondition === "Snow") {
+            windowZone.classList.add("weather-snow");
+        } 
+        // If it's "Clear" or "Clouds", the glass just stays empty and transparent!
+
+    } catch (error) {
+        console.error("Failed to fetch weather from the skies above Nirn:", error);
+    }
+}
+// Run immediately, then check every 15 minutes
+updateWeatherWindow();
+setInterval(updateWeatherWindow, 900000);
 
 // --- WIDGETS: SINK & AVATAR ---
 function updateClock() {
