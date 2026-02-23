@@ -1,108 +1,109 @@
-/* --- 1. CORE SYSTEM --- */
 :root {
     --eso-gold: #cda24b;
     --eso-gold-dim: #8b6d32;
-    --parchment: rgba(12, 10, 7, 0.98);
+    --parchment: rgba(12, 10, 8, 0.94);
     --text-cream: #e0d8c8;
+    --glow: 0 0 15px rgba(205, 162, 75, 0.4);
 }
 
 * { box-sizing: border-box; }
 
-body, html {
+body, html { 
     margin: 0; padding: 0; 
     width: 100vw; height: 100vh; 
-    background: #000; 
-    overflow: hidden; 
-    font-family: 'Cormorant Garamond', serif;
+    background: #000; overflow: hidden; 
+    font-family: 'Cormorant Garamond', serif; 
+    color: var(--text-cream);
 }
 
-.app-container {
-    position: relative;
+/* THE ASPECT-LOCKED WRAPPER */
+.app-wrapper {
+    display: flex; justify-content: center; align-items: center;
     width: 100vw; height: 100vh;
 }
 
-/* --- 2. THE BACKGROUND (Anti-Zoom Fix) --- */
-#bg-image {
-    position: absolute;
-    top: 0; left: 0;
-    width: 100%; height: 100%;
-    object-fit: cover; /* This makes the image fit without the massive zoom */
-    z-index: 1;
+.kitchen-stage {
+    position: relative;
+    width: 100%; max-width: 1920px;
+    aspect-ratio: 16 / 9; /* Locks the layout from drifting */
+    background: #000; overflow: hidden;
+    box-shadow: 0 0 50px #000;
 }
 
-/* --- 3. THE CHARACTER SHEET & STATS --- */
-#avatar-corner {
-    position: absolute;
-    bottom: 25px; right: 25px;
-    z-index: 100;
-    display: flex; flex-direction: column; align-items: flex-end;
-}
+#bg-image { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; z-index: 1; transition: opacity 1s; }
 
-#avatar-stats-box {
-    width: 280px;
-    padding: 20px;
-    margin-bottom: 12px;
+/* LAYERS */
+#seasonal-overlay, .atmosphere-overlay, #window-zone, #decor-layer {
+    position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none;
+}
+.atmosphere-overlay { z-index: 5; background: radial-gradient(circle at 50% 50%, rgba(205, 162, 75, 0.04), transparent); animation: breathe 8s infinite ease-in-out; }
+@keyframes breathe { 0%, 100% { opacity: 0.3; } 50% { opacity: 0.7; } }
+#decor-layer { z-index: 15; } /* For future pumpkins/wreaths */
+
+/* INTERACTIVE TRIGGERS */
+.trigger { position: absolute; z-index: 20; cursor: pointer; transition: 0.3s; }
+.trigger:hover { box-shadow: inset 0 0 30px rgba(205, 162, 75, 0.2); background: rgba(205, 162, 75, 0.05); }
+#bookshelf-trigger { top: 8%; left: 3%; width: 18%; height: 55%; }
+#hearth-trigger { top: 45%; left: 22%; width: 12%; height: 25%; }
+#table-trigger { bottom: 10%; right: 28%; width: 22%; height: 20%; }
+
+/* GLASSMORPHISM PANELS */
+.glass {
     background: var(--parchment);
-    border: 2px solid var(--eso-gold);
-    backdrop-filter: blur(15px);
-    box-shadow: 0 10px 40px rgba(0,0,0,1);
-    color: var(--text-cream) !important;
+    backdrop-filter: blur(12px) saturate(130%);
+    border: 1px solid var(--eso-gold-dim);
+    box-shadow: 0 15px 40px rgba(0,0,0,0.9), inset 0 0 15px rgba(205, 162, 75, 0.05);
+    color: var(--text-cream);
 }
-
-#avatar-stats-box h2 { font-family: 'Cinzel'; color: var(--eso-gold); margin-top: 0; border-bottom: 1px solid var(--eso-gold-dim); padding-bottom: 10px; }
-
-.stat-row { display: flex; justify-content: space-between; margin: 10px 0; font-size: 1.1rem; }
-
-#user-avatar {
-    width: 130px; height: 130px;
-    border-radius: 50%;
-    border: 3px solid var(--eso-gold);
-    cursor: pointer;
-    box-shadow: 0 0 20px #000;
-    transition: 0.3s ease;
-}
-
-#user-avatar:hover { transform: scale(1.05); box-shadow: 0 0 15px var(--eso-gold); }
-
-/* --- 4. THE ALMANAC (Calendar Fix) --- */
-#bookshelf-panel {
-    position: absolute;
-    top: 5%; left: 3%;
-    width: 310px;
-    padding: 20px;
-    z-index: 50;
-    background: var(--parchment);
-    border: 2px solid var(--eso-gold);
-}
-
-#almanac-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 5px; margin-top: 15px; }
-
-.almanac-day {
-    text-align: center; padding: 8px 0; color: var(--text-cream);
-    cursor: pointer; font-family: 'Cinzel'; transition: 0.2s;
-}
-
-.almanac-day:hover { background: rgba(205, 162, 75, 0.2); }
-.almanac-day.today { background: var(--eso-gold); color: #000; font-weight: bold; }
-
-/* --- 5. FIXED CLOCK --- */
-#sink-clock {
-    position: absolute;
-    top: 61%; right: 26.5%;
-    color: var(--eso-gold);
-    font-family: 'Cinzel', serif;
-    font-size: 2.2vw;
-    text-shadow: 0 0 12px #000;
-    z-index: 20;
-    pointer-events: none;
-}
-
-/* --- 6. BUTTONS --- */
-button {
-    background: linear-gradient(to bottom, #cda24b, #8b6d32);
-    border: 1px solid #332811;
-    color: #000 !important;
-    padding: 10px; font-family: 'Cinzel'; font-weight: bold; cursor: pointer;
-}
-
+.panel { position: absolute; z-index: 50; padding: 20px; border-radius: 2px; }
+.panel-title { font-family: 'Cinzel'; color: var(--eso-gold); border-bottom: 1px solid var(--eso-gold-dim); padding-bottom: 8px; margin-top: 0; font-size: 1.2rem; }
+.dismiss { float: right; font-size: 0.65rem; color: var(--eso-gold-dim); cursor: pointer; font-family: 'Cinzel'; text-transform: uppercase; letter-spacing: 1px; margin-top: 5px; }
+.dismiss:hover { color: #fff; text-shadow: var(--glow); }
 .hidden { display: none !important; }
+
+/* CHRONOS WIDGET (Sink) */
+#chronos-widget { position: absolute; top: 60%; right: 25%; z-index: 30; text-align: center; pointer-events: none; }
+#sink-clock { font-family: 'Cinzel'; font-size: 2.8cqw; color: var(--eso-gold); text-shadow: 2px 2px 5px #000, var(--glow); }
+#sink-temp-ms, #sink-temp-tn { font-size: 1cqw; text-shadow: 1px 1px 3px #000; letter-spacing: 1px; color: #fff; }
+
+/* AVATAR & AI FAMILIAR */
+#avatar-corner { position: absolute; bottom: 3%; right: 2%; z-index: 100; display: flex; flex-direction: column; align-items: flex-end; }
+#user-avatar { width: 10cqw; height: 10cqw; border-radius: 50%; border: 2px solid var(--eso-gold); cursor: pointer; box-shadow: 0 0 20px #000; object-fit: cover; }
+#avatar-stats-box { width: 300px; margin-bottom: 15px; }
+
+#ai-familiar-corner { position: absolute; bottom: 3%; left: 2%; z-index: 100; display: flex; align-items: flex-end; cursor: pointer; }
+#ai-goblin { width: 8cqw; height: 8cqw; border-radius: 50%; border: 1px solid var(--eso-gold-dim); object-fit: cover; }
+#goblin-dialogue { margin-left: 15px; padding: 10px 15px; font-size: 0.9rem; border-radius: 2px; max-width: 250px; }
+
+/* ALMANAC & LISTS */
+#bookshelf-panel { top: 5%; left: 3%; width: 320px; max-height: 85%; overflow-y: auto; }
+#almanac-header { display: flex; justify-content: space-between; font-family: 'Cinzel'; color: var(--eso-gold); margin-bottom: 10px; }
+.nav-btn { cursor: pointer; transition: 0.2s; } .nav-btn:hover { text-shadow: var(--glow); color: #fff; }
+#almanac-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; }
+.almanac-day { text-align: center; padding: 6px 0; cursor: pointer; font-family: 'Cinzel'; transition: 0.2s; border: 1px solid transparent; }
+.almanac-day:hover { border-color: var(--eso-gold); background: rgba(205, 162, 75, 0.1); }
+.almanac-day.today { background: var(--eso-gold-dim); color: #000; font-weight: bold; }
+.almanac-day.has-event { color: var(--eso-gold); font-weight: bold; text-decoration: underline; }
+
+/* UI CONTROLS */
+button { background: linear-gradient(145deg, #cda24b, #8b6d32); border: 1px solid #332811; color: #111; font-family: 'Cinzel'; font-weight: bold; text-transform: uppercase; padding: 8px 15px; cursor: pointer; transition: 0.2s; width: 100%; margin-top: 8px; font-size: 0.8rem; }
+button:hover { filter: brightness(1.2); box-shadow: var(--glow); }
+.action-grid, .toc-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+
+input[type="text"], textarea { width: 100%; background: rgba(0,0,0,0.6); border: 1px solid var(--eso-gold-dim); color: var(--text-cream); padding: 10px; font-family: inherit; margin-top: 5px; outline: none; }
+textarea { height: 250px; resize: none; font-size: 1.1rem; }
+input[type="text"]:focus, textarea:focus { border-color: var(--eso-gold); box-shadow: inset 0 0 10px rgba(205, 162, 75, 0.2); }
+
+ul { list-style-type: none; padding-left: 0; margin-top: 10px; }
+li { padding: 5px 0; border-bottom: 1px solid rgba(255,255,255,0.05); }
+
+/* MODALS */
+.modal { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 200; display: flex; justify-content: center; align-items: center; }
+.modal-content { width: 90%; max-width: 600px; padding: 30px; }
+.holy-wise-section { margin-top: 20px; border-top: 1px solid var(--eso-gold-dim); padding-top: 10px; font-style: italic; text-align: center; }
+
+/* AUDIO MENU */
+#audio-menu { top: 40%; left: 35%; width: 250px; }
+
+.stat-row { display: flex; justify-content: space-between; border-bottom: 1px solid rgba(205,162,75,0.2); padding: 5px 0; margin-bottom: 10px; }
+.instruction-text { font-size: 0.85rem; color: var(--eso-gold-dim); margin-bottom: 10px; font-style: italic; }
