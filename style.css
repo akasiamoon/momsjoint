@@ -67,7 +67,7 @@ body, html {
     pointer-events: none; 
 }
 
-/* --- AVATAR CORNER (MMO STYLE) --- */
+/* --- AVATAR CORNER --- */
 #avatar-corner {
     position: absolute;
     bottom: 2%;
@@ -75,9 +75,6 @@ body, html {
     z-index: 20;
     display: flex; 
     flex-direction: column;
-    align-items: center; 
-    width: 240px;
-    /* Notice: No background or border on this main container anymore! */
 }
 
 #user-avatar {
@@ -87,13 +84,37 @@ body, html {
     border: 3px solid #d4af37;
     object-fit: cover;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.8);
-    z-index: 2; /* Keeps the avatar on top of the stats box */
-    margin-bottom: -40px; /* THE MAGIC TRICK: Pulls the box below up to overlap! */
+    cursor: pointer; /* Makes it look like a button when you hover */
+    transition: transform 0.2s ease; /* Smooth hover animation */
+}
+
+/* Gives the avatar a little "pop" when you hover over it */
+#user-avatar:hover {
+    transform: scale(1.05);
 }
 
 #avatar-stats-box {
-    /* Lowered the opacity slightly from 0.8 to 0.5 to let more of the kitchen show through */
+    position: absolute;
+    bottom: 110px; /* Pops up exactly above the avatar image */
+    left: 0;
+    width: 240px;
     background: rgba(20, 20, 20, 0.5); 
+    backdrop-filter: blur(10px); 
+    -webkit-backdrop-filter: blur(10px); 
+    border: 1px solid rgba(212, 175, 55, 0.3); 
+    border-radius: 12px;
+    padding: 15px; /* Removed the giant top padding since they don't overlap anymore */
+    box-sizing: border-box; 
+    color: white;
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.6); 
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+#avatar-stats-box.hidden {
+    display: none;
+}
     
     /* THE GLASSMORPHISM MAGIC: Blurs whatever is behind this box */
     backdrop-filter: blur(10px); 
