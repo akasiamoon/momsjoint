@@ -115,7 +115,7 @@ function updateEnv() {
     if (!img) return;
 
     // Use your specific filename for all 3 while testing to ensure it shows up
-    const mainImg = "Moonshearthfinal.jpg"; 
+    const mainImg = "momsjointday.jpg"; 
     
     if (h >= 6 && h < 17) img.src = mainImg;      
     else if (h >= 17 && h < 20) img.src = mainImg;   
