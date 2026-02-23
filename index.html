@@ -11,6 +11,30 @@
 <div class="app-container">
     <img src="image_8cf21b.jpg" alt="Cozy Kitchen" id="bg-image">
 
+    <div id="hidden-link-grid">
+        <div class="hidden-item" onclick="openApp('todo')" title="To Do List"></div>
+        <div class="hidden-item" onclick="openApp('weekly-meal-plan')" title="Weekly Meal Plan"></div>
+        <div class="hidden-item" onclick="openApp('calendar')" title="Calendar"></div>
+        <div class="hidden-item" onclick="openApp('market-list')" title="Market List"></div>
+        <div class="hidden-item" onclick="openApp('bible-verse')" title="Bible Verse of the Day"></div>
+        
+        <div class="hidden-item" onclick="openApp('contingency-ledger')" title="Contingency Ledger"></div>
+        <div class="hidden-item" onclick="openApp('recipes')" title="Recipes"></div>
+        <div class="hidden-item" onclick="openApp('dev-ideas')" title="Web App & Gaming Dev Ideas"></div>
+        <div class="hidden-item" onclick="openApp('mood-log')" title="Mood Log"></div>
+        <div class="hidden-item" onclick="openApp('budget-ledger')" title="Budget Ledger"></div>
+        
+        <div class="hidden-item" onclick="openApp('notes')" title="Notes"></div>
+        <div class="hidden-item" onclick="openApp('sleep-log')" title="Sleep Log"></div>
+        <div class="hidden-item" onclick="openApp('meal-log')" title="Meal Log"></div>
+        <div class="hidden-item" onclick="openApp('water-log')" title="Water Log"></div>
+        <div class="hidden-item" onclick="openApp('self-care-log')" title="Self Care Log"></div>
+        
+        <div class="hidden-item" onclick="openApp('phoebe')" title="Phoebe"></div>
+        <div class="hidden-item" onclick="openApp('tripp')" title="Tripp"></div>
+        <div class="hidden-item" onclick="openApp('cory')" title="Cory"></div>
+        <div class="hidden-item"></div> <div class="hidden-item"></div> </div>
+
     <div id="window-zone"></div>
     
     <div id="sink-clock">00:00</div>
@@ -21,32 +45,39 @@
         <div id="daily-info">Loading today's info...</div>
     </div>
 
-    <div id="hearth-zone" onclick="toggleFireplaceAudio()" title="Play Soundscape"></div>
-    <audio id="hearth-audio" loop>
-        <source src="fire-crackling.mp3" type="audio/mpeg"> 
-    </audio>
+    <div id="hearth-zone" onclick="toggleAudioMenu()" title="Open Soundscapes"></div>
+    
+    <div id="audio-menu" class="hidden">
+        <h3>Hearth Soundscapes</h3>
+        
+        <div class="audio-section">
+            <label for="ambient-select">Ambient Noise:</label>
+            <select id="ambient-select" onchange="changeAudio('ambient')">
+                <option value="fire.mp3">Crackling Fire</option>
+                <option value="rain.mp3">Rainstorm</option>
+                <option value="tavern.mp3">Busy Tavern</option>
+            </select>
+            <audio id="ambient-player" loop controls>
+                <source src="fire.mp3" type="audio/mpeg">
+            </audio>
+        </div>
 
-    <div id="hidden-link-grid">
-        <div class="hidden-item" onclick="openApp('todo')" title="To Do List"></div>
-        <div class="hidden-item" onclick="openApp('meal-plan')" title="Weekly Meal Plan"></div>
-        <div class="hidden-item" onclick="openApp('calendar')" title="Calendar"></div>
-        <div class="hidden-item" onclick="openApp('market')" title="Market List"></div>
+        <div class="audio-section">
+            <label for="primary-select">Primary Audio (Music/Book):</label>
+            <select id="primary-select" onchange="changeAudio('primary')">
+                <option value="lofi.mp3">Lofi Beats</option>
+                <option value="audiobook.mp3">Current Audiobook</option>
+                <option value="podcast.mp3">Podcast</option>
+            </select>
+            <audio id="primary-player" controls>
+                <source src="lofi.mp3" type="audio/mpeg">
+            </audio>
+        </div>
         
-        <div class="hidden-item" onclick="openApp('bible')" title="Verse of the Day"></div>
-        <div class="hidden-item" onclick="openApp('contingency-ledger')" title="Contingency Ledger"></div>
-        <div class="hidden-item" onclick="openApp('recipes')" title="Recipes"></div>
-        <div class="hidden-item" onclick="openApp('dev-ideas')" title="Dev Ideas"></div>
-        
-        <div class="hidden-item" onclick="openApp('mood')" title="Mood Log"></div>
-        <div class="hidden-item" onclick="openApp('budget')" title="Budget Ledger"></div>
-        <div class="hidden-item" onclick="openApp('notes')" title="Notes"></div>
-        <div class="hidden-item" onclick="openApp('sleep')" title="Sleep Log"></div>
-        
-        <div class="hidden-item" onclick="openApp('meals')" title="Meal Log"></div>
-        <div class="hidden-item" onclick="openApp('water')" title="Water Log"></div>
-        <div class="hidden-item" onclick="openApp('self-care')" title="Self Care"></div>
-        <div class="hidden-item" onclick="openApp('phoebe-tripp-cory')" title="Phoebe, Tripp, Cory"></div> 
+        <button onclick="toggleAudioMenu()">Close Menu</button>
     </div>
+
+</div>
 
 <script src="script.js"></script>
 </body>
