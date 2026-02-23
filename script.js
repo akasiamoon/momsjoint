@@ -124,11 +124,11 @@ function updateEnv() {
 updateEnv();
 
 // Update with your actual Key and Zip
-const API = "833c12742186f3ca3e693f0507a09ec0"; // Removed the 'Y' at the start
+const API = "88f3e35af62ba59bad38a3d346e0ca84"; // Removed the 'Y' at the start
 const ZIP = "38834";
 
 async function upWeather() {
-    if (API === "833c12742186f3ca3e693f0507a09ec0" || API.length < 10) return;
+    if (API === "88f3e35af62ba59bad38a3d346e0ca84" || API.length < 10) return;
     
     try {
         const r = await fetch(`https://api.openweathermap.org/data/2.5/weather?zip=${ZIP},US&appid=${API}`);
