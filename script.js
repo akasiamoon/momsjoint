@@ -52,9 +52,8 @@ function changeAudio(type) {
     }
 }
 
-// --- 4. HIDDEN LINKS INTERFACE (MODAL) ---
+// --- 4. HIDDEN LINKS INTERFACE & DATA MANAGEMENT ---
 
-// Map your IDs to clean, readable titles
 const appTitles = {
     'todo': 'To Do List',
     'weekly-meal-plan': 'Weekly Meal Plan',
@@ -76,29 +75,25 @@ const appTitles = {
     'cory': 'Cory'
 };
 
-// Temporary storage memory so your text doesn't disappear immediately
-const appData = {};
+// 1. Initialize Memory from Local Storage (Auto-load on refresh)
+// If there's no save file yet, it defaults to an empty object {}
+let appData = JSON.parse(localStorage.getItem('cozyKitchenSave')) || {};
 
 function openApp(appName) {
     const modal = document.getElementById('app-modal');
     const title = document.getElementById('modal-title');
     const body = document.getElementById('modal-body');
 
-    // 1. Set the correct title
     title.innerText = appTitles[appName];
-
-    // 2. Tell the modal which app is currently open (so the save button knows)
     modal.setAttribute('data-current-app', appName);
 
-    // 3. Load previously typed data if it exists
+    // Pull the saved text from memory
     let savedText = appData[appName] || '';
     
-    // 4. Inject a text area for logging
     body.innerHTML = `
         <textarea id="app-input" placeholder="Start typing your ${appTitles[appName].toLowerCase()} here...">${savedText}</textarea>
     `;
 
-    // 5. Unhide the modal
     modal.classList.remove('hidden');
 }
 
@@ -111,9 +106,51 @@ function saveModalData() {
     const currentApp = modal.getAttribute('data-current-app');
     const inputData = document.getElementById('app-input').value;
 
-    // Save the typed text to our memory object
+    // 2. Save to local memory AND browser's Local Storage
     appData[currentApp] = inputData;
+    localStorage.setItem('cozyKitchenSave', JSON.stringify(appData)); 
     
-    alert(appTitles[currentApp] + ' saved successfully!');
     closeModal();
+}
+
+// --- CROSS-SAVE SYSTEM (MMO-STYLE) ---
+
+// 3. Export Data (Creates a downloadable JSON file)
+function exportData() {
+    // Convert our data object into a neatly formatted JSON string
+    const dataStr = JSON.stringify(appData, null, 2);
+    // Create a temporary "file" in the browser
+    const blob = new Blob([dataStr], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+    
+    // Create an invisible link, click it to trigger download, then destroy it
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = "cozy_kitchen_save.json";
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+}
+
+// 4. Import Data (Reads the uploaded JSON file and overwrites local storage)
+function importData(event) {
+    const file = event.target.files[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = function(e) {
+        try {
+            const importedData = JSON.parse(e.target.result);
+            appData = importedData; // Update live memory
+            localStorage.setItem('cozyKitchenSave', JSON.stringify(appData)); // Update browser memory
+            alert("Save data loaded successfully! Welcome back.");
+        } catch (error) {
+            alert("Error loading save file. Make sure it is a valid cozy_kitchen_save.json file.");
+        }
+    };
+    reader.readAsText(file);
+    
+    // Reset the file input so you can upload the same file again later if needed
+    event.target.value = ''; 
 }
