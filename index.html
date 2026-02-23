@@ -39,8 +39,11 @@
     
     <div id="sink-clock">00:00</div>
 
-    <div id="avatar-corner">
-        <button id="save-btn">💾 Save Data</button>
+<div id="avatar-corner">
+        <button id="save-btn" onclick="exportData()">💾 Export Save</button>
+        <button id="load-btn" onclick="document.getElementById('import-file').click()">📂 Load Save</button>
+        <input type="file" id="import-file" style="display: none;" onchange="importData(event)" accept=".json">
+        
         <div id="account-balance">Balance: $0.00</div>
         <div id="daily-info">Loading today's info...</div>
     </div>
