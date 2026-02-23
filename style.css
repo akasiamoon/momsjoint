@@ -1,0 +1,91 @@
+body, html {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #121212;
+    font-family: 'Courier New', Courier, monospace;
+}
+
+.app-container {
+    position: relative;
+    width: 100%;
+    max-width: 1200px; /* Adjust based on your preference */
+    margin: 0 auto;
+    overflow: hidden;
+}
+
+#bg-image {
+    width: 100%;
+    display: block;
+}
+
+/* --- WIDGETS --- */
+
+#sink-clock {
+    position: absolute;
+    /* You will need to tweak these percentages to sit perfectly on the sink */
+    top: 60%; 
+    right: 25%;
+    color: #ffd700; /* Golden color */
+    font-size: 2vw; /* Scales with screen size */
+    font-weight: bold;
+    text-shadow: 0 0 10px #ffaa00, 0 0 20px #ffaa00; /* Glowing effect */
+    pointer-events: none; /* So you can't accidentally click the text */
+}
+
+#hearth-zone {
+    position: absolute;
+    top: 45%;
+    left: 20%;
+    width: 15%;
+    height: 25%;
+    cursor: pointer;
+    /* border: 2px solid red; Uncomment to see where the box is while testing */
+}
+
+#window-zone {
+    position: absolute;
+    top: 20%;
+    right: 15%;
+    width: 20%;
+    height: 35%;
+    pointer-events: none;
+    /* We will inject CSS animations here later for rain/snow */
+}
+
+#avatar-corner {
+    position: absolute;
+    bottom: 2%;
+    left: 2%;
+    background: rgba(0, 0, 0, 0.6);
+    color: white;
+    padding: 15px;
+    border-radius: 10px;
+    border: 1px solid #d4af37;
+}
+
+#avatar-corner button {
+    background: #d4af37;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+    border-radius: 5px;
+    margin-bottom: 10px;
+}
+
+/* --- HIDDEN LINKS --- */
+
+.hidden-link {
+    position: absolute;
+    cursor: pointer;
+    /* border: 2px solid blue;  Uncomment to help map your items! */
+}
+
+/* Tweak these percentages to place the invisible box over the recipe book, etc. */
+#link-recipe-book {
+    bottom: 15%;
+    right: 35%;
+    width: 15%;
+    height: 10%;
+}
