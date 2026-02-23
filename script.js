@@ -1,12 +1,14 @@
 let appData = JSON.parse(localStorage.getItem('cozyKitchenSave')) || {};
-if (!appData.marketList) appData.marketList = [];
-if (!appData.notesList) appData.notesList = [];
+const lists = ['marketList', 'notesList', 'todoList'];
+lists.forEach(list => { if (!appData[list]) appData[list] = []; });
 if (!appData.appointments) appData.appointments = {};
 
 const appTitles = {
-    'contingency-ledger': 'Contingency Ledger', 'todo': 'To Do List', 'weekly-meal-plan': 'Weekly Meal Plan',
-    'bible-verse': 'Bible Verse', 'recipes': 'Recipes', 'dev-ideas': 'Dev Ideas', 'mood-log': 'Mood Log',
-    'budget-ledger': 'Budget Ledger', 'sleep-log': 'Sleep Log', 'meal-log': 'Meal Log', 'phoebe': 'Phoebe', 'tripp': 'Tripp', 'cory': 'Cory'
+    'contingency-ledger': 'Contingency Ledger', 'todo': 'To Do List', 
+    'weekly-meal-plan': 'Weekly Meal Plan', 'bible-verse': 'Bible Verse', 
+    'recipes': 'Recipes', 'dev-ideas': 'Dev Ideas', 'mood-log': 'Mood Log',
+    'budget-ledger': 'Budget Ledger', 'sleep-log': 'Sleep Log', 
+    'meal-log': 'Meal Log', 'phoebe': 'Phoebe', 'tripp': 'Tripp', 'cory': 'Cory'
 };
 
 window.onload = function() {
@@ -17,84 +19,99 @@ window.onload = function() {
 };
 
 function updateClock() {
+    const clock = document.getElementById('sink-clock');
+    if (!clock) return;
     const now = new Date();
-    let h = now.getHours();
-    let m = now.getMinutes() < 10 ? '0' + now.getMinutes() : now.getMinutes();
+    let h = now.getHours(), m = now.getMinutes();
     let ampm = h >= 12 ? 'PM' : 'AM';
     h = h % 12 || 12;
-    document.getElementById('sink-clock').innerText = `${h}:${m} ${ampm}`;
+    m = m < 10 ? '0' + m : m;
+    clock.innerText = `${h}:${m} ${ampm}`;
 }
 setInterval(updateClock, 1000);
 
 function toggleBookshelf() { document.getElementById('bookshelf-panel').classList.toggle('hidden'); }
 function toggleAvatarMenu() { document.getElementById('avatar-stats-box').classList.toggle('hidden'); }
 function toggleAudioMenu() { document.getElementById('audio-menu').classList.toggle('hidden'); }
-function toggleSection(id) { document.getElementById(id).classList.toggle('hidden'); }
 function toggleTOC() { document.getElementById('toc-modal').classList.toggle('hidden'); }
+function toggleSection(id) { document.getElementById(id).classList.toggle('hidden'); }
 
-// ALMANAC
-let currentAlmanacDate = new Date();
-const staticHolidays = { "1-1": "New Year", "5-26": "My Birthday", "10-31": "Halloween", "12-25": "Christmas" };
-
-function getMoonPhase(y, m, d) {
-    let c = 365.25 * (m < 3 ? y - 1 : y), e = 30.6 * (m < 3 ? m + 13 : m + 1);
-    let jd = (c + e + d - 694039.09) / 29.5305882;
-    let b = Math.round((jd - Math.floor(jd)) * 8);
-    return ['New Moon', 'Waxing Crescent', 'First Quarter', 'Waxing Gibbous', 'Full Moon', 'Waning Gibbous', 'Last Quarter', 'Waning Crescent'][b % 8];
+function changeAudio(type) {
+    const amb = document.getElementById('ambient-select');
+    const pri = document.getElementById('primary-select');
+    const ambP = document.getElementById('ambient-player');
+    const priP = document.getElementById('primary-player');
+    if (type === 'ambient') { ambP.src = amb.value; ambP.load(); ambP.play(); }
+    else { priP.src = pri.value; priP.load(); priP.play(); }
 }
 
+let currentAlmanacDate = new Date();
 function renderAlmanac() {
+    const grid = document.getElementById('almanac-grid');
+    if (!grid) return;
     const y = currentAlmanacDate.getFullYear(), m = currentAlmanacDate.getMonth();
     document.getElementById('almanac-month-year').innerText = currentAlmanacDate.toLocaleString('default', { month: 'long', year: 'numeric' });
-    const grid = document.getElementById('almanac-grid'), today = new Date();
     grid.innerHTML = '';
-    for (let x = 0; x < new Date(y, m, 1).getDay(); x++) grid.appendChild(document.createElement('div'));
+    const firstDay = new Date(y, m, 1).getDay();
+    for (let x = 0; x < firstDay; x++) grid.appendChild(document.createElement('div'));
     for (let i = 1; i <= new Date(y, m + 1, 0).getDate(); i++) {
         const d = document.createElement('div');
-        d.className = 'almanac-day' + (i === today.getDate() && m === today.getMonth() ? ' today' : '');
-        const fK = `${y}-${m + 1}-${i}`, sK = `${m + 1}-${i}`;
-        if (staticHolidays[sK] || appData.appointments[fK]) d.classList.add('has-event');
+        d.className = 'almanac-day';
+        if (i === new Date().getDate() && m === new Date().getMonth()) d.classList.add('today');
         d.innerText = i;
         d.onclick = () => {
-            let h = `<span class="highlight">${m + 1}/${i}/${y}</span>Phase: ${getMoonPhase(y, m + 1, i)}`;
-            if (staticHolidays[sK]) h += `<br><span class="highlight">${staticHolidays[sK]}</span>`;
-            if (appData.appointments[fK]) h += `<br>Record: ${appData.appointments[fK]}`;
-            document.getElementById('almanac-info').innerHTML = h;
-            let n = prompt("Inscribe record:", appData.appointments[fK] || "");
-            if (n !== null) { appData.appointments[fK] = n; saveCoreData(); renderAlmanac(); }
+            let note = prompt("Inscribe a record:", appData.appointments[`${y}-${m+1}-${i}`] || "");
+            if (note !== null) {
+                appData.appointments[`${y}-${m+1}-${i}`] = note;
+                saveCoreData();
+                renderAlmanac();
+            }
         };
         grid.appendChild(d);
     }
 }
 function changeMonth(d) { currentAlmanacDate.setMonth(currentAlmanacDate.getMonth() + d); renderAlmanac(); }
 
-// LISTS
 function handleEnter(e, t) {
     if (e.key === 'Enter') {
         const i = document.getElementById(`${t}-input`);
-        if (i.value.trim()) { appData[t === 'market' ? 'marketList' : 'notesList'].push(i.value.trim()); saveCoreData(); renderList(t); i.value = ''; }
+        if (i && i.value.trim()) {
+            appData[t === 'market' ? 'marketList' : 'notesList'].push(i.value.trim());
+            saveCoreData();
+            renderList(t);
+            i.value = '';
+        }
     }
 }
 function renderList(t) {
     const l = document.getElementById(`${t}-list`), d = appData[t === 'market' ? 'marketList' : 'notesList'];
-    l.innerHTML = ''; d.forEach(x => { let li = document.createElement('li'); li.innerText = x; l.appendChild(li); });
+    if (!l) return;
+    l.innerHTML = '';
+    d.forEach(x => { let li = document.createElement('li'); li.innerText = x; l.appendChild(li); });
 }
-function clearList(t) { appData[t === 'market' ? 'marketList' : 'notesList'] = []; saveCoreData(); renderList(t); }
+function clearList(t) { 
+    appData[t === 'market' ? 'marketList' : 'notesList'] = []; 
+    saveCoreData();
+    renderList(t); 
+}
 
-// APP MODAL
+function openApp(n) {
+    const m = document.getElementById('app-modal');
+    document.getElementById('modal-title').innerText = appTitles[n];
+    m.setAttribute('data-app', n);
+    document.getElementById('modal-body').innerHTML = `<textarea id="app-input" style="width:100%; height:200px; background:#111; color:white; border:1px solid #cda24b;">${appData[n] || ""}</textarea>`;
+    m.classList.remove('hidden');
+    document.getElementById('toc-modal').classList.add('hidden');
+}
+
+function closeModal() { document.getElementById('app-modal').classList.add('hidden'); }
+
 function saveModalData() {
     const n = document.getElementById('app-modal').getAttribute('data-app');
-    const inputField = document.getElementById('app-input');
-
-    // Only try to save text if the text box actually exists
-    if (inputField) {
-        appData[n] = inputField.value;
-        saveCoreData();
-    }
-    
-    // Always close the window, even if there's no text box!
+    const input = document.getElementById('app-input');
+    if (input) appData[n] = input.value;
+    saveCoreData();
     closeModal();
-}
 }
 
 function saveCoreData() { localStorage.setItem('cozyKitchenSave', JSON.stringify(appData)); }
@@ -107,50 +124,3 @@ function importData(e) {
     r.onload = (x) => { appData = JSON.parse(x.target.result); saveCoreData(); location.reload(); };
     r.readAsText(e.target.files[0]);
 }
-
-// --- ENVIRONMENT & WEATHER ENGINES ---
-function updateEnv() {
-    const h = new Date().getHours();
-    const img = document.getElementById('bg-image');
-    if (!img) return;
-
-    // Use your specific filename for all 3 while testing to ensure it shows up
-    const mainImg = "momsjointday.jpg"; 
-    
-    if (h >= 6 && h < 17) img.src = mainImg;      
-    else if (h >= 17 && h < 20) img.src = mainImg;   
-    else img.src = mainImg;    
-}
-updateEnv();
-
-// Update with your actual Key and Zip
-const API = "88f3e35af62ba59bad38a3d346e0ca84"; // Removed the 'Y' at the start
-const ZIP = "38834";
-
-async function upWeather() {
-    if (API === "88f3e35af62ba59bad38a3d346e0ca84" || API.length < 10) return;
-    
-    try {
-        const r = await fetch(`https://api.openweathermap.org/data/2.5/weather?zip=${ZIP},US&appid=${API}`);
-        const d = await r.json();
-        
-        // Safety Check: If the API sends an error, don't crash!
-        if (d.cod !== 200) {
-            console.warn("Weather API message:", d.message);
-            return;
-        }
-
-        const w = d.weather[0].main; 
-        const z = document.getElementById('window-zone');
-        if (!z) return;
-
-        z.className = ""; // Reset
-        if (w === "Rain" || w === "Drizzle") z.classList.add("weather-rain");
-        if (w === "Snow") z.classList.add("weather-snow");
-
-    } catch (err) {
-        console.error("Weather failed to load, but the hearth is still warm:", err);
-    }
-}
-upWeather();
-setInterval(upWeather, 900000);
