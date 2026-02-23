@@ -82,19 +82,19 @@ function renderList(t) {
 function clearList(t) { appData[t === 'market' ? 'marketList' : 'notesList'] = []; saveCoreData(); renderList(t); }
 
 // APP MODAL
-function openApp(n) {
-    const m = document.getElementById('app-modal');
-    document.getElementById('modal-title').innerText = appTitles[n];
-    m.setAttribute('data-app', n);
-    document.getElementById('modal-body').innerHTML = `<textarea id="app-input">${appData[n] || ""}</textarea>`;
-    m.classList.remove('hidden');
-    document.getElementById('toc-modal').classList.add('hidden');
-}
-function closeModal() { document.getElementById('app-modal').classList.add('hidden'); }
 function saveModalData() {
     const n = document.getElementById('app-modal').getAttribute('data-app');
-    appData[n] = document.getElementById('app-input').value;
-    saveCoreData(); closeModal();
+    const inputField = document.getElementById('app-input');
+
+    // Only try to save text if the text box actually exists
+    if (inputField) {
+        appData[n] = inputField.value;
+        saveCoreData();
+    }
+    
+    // Always close the window, even if there's no text box!
+    closeModal();
+}
 }
 
 function saveCoreData() { localStorage.setItem('cozyKitchenSave', JSON.stringify(appData)); }
