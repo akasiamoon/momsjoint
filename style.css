@@ -1,322 +1,153 @@
 body, html {
-    margin: 0;
-    padding: 0;
-    width: 100%;
-    height: 100%;
-    background-color: #121212;
-    font-family: 'Courier New', Courier, monospace;
+    margin: 0; padding: 0; width: 100%; height: 100%;
+    background-color: #0d0d0d;
+    font-family: 'Cormorant Garamond', serif; /* ESO Body Font */
+    color: #e0d8c8;
 }
 
 .app-container {
-    position: relative;
-    width: 100%;
-    max-width: 1200px; 
-    margin: 0 auto;
-    overflow: hidden;
+    position: relative; width: 100%; max-width: 1200px; margin: 0 auto; overflow: hidden;
 }
 
-#bg-image {
-    width: 100%;
-    display: block;
+#bg-image { width: 100%; display: block; }
+
+/* --- THE ESO AESTHETIC COLORS --- */
+:root {
+    --eso-gold: #cda24b;
+    --eso-gold-dim: #8b6d32;
+    --eso-dark: rgba(15, 15, 15, 0.85);
 }
 
-/* --- INVISIBLE GRID --- */
-#hidden-link-grid {
+h1, h2, h3, button, #sink-clock {
+    font-family: 'Cinzel', serif; /* ESO Header Font */
+}
+
+/* --- THE TABLE ZONE (Cat/Tea) --- */
+#table-zone {
     position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    display: grid;
-    /* 5 columns, 4 rows = 20 total blocks */
-    grid-template-columns: repeat(5, 1fr);
-    grid-template-rows: repeat(4, 1fr);
-    z-index: 10; 
+    bottom: 10%; right: 25%;
+    width: 25%; height: 25%;
+    cursor: pointer; z-index: 20;
+    /* border: 1px solid red; Uncomment to see exactly where this box sits on your image! */
 }
 
-.hidden-item {
-    cursor: pointer;
-    transition: background 0.3s ease;
-}
-
-.hidden-item:hover {
-    background: rgba(255, 255, 255, 0.05); 
-}
-
-/* --- WIDGETS --- */
-
-#window-zone {
+/* --- THE BOOKSHELF PANEL --- */
+#bookshelf-panel {
     position: absolute;
-    top: 20%;
-    right: 15%;
-    width: 20%;
-    height: 35%;
+    top: 5%; left: 3%;
+    width: 280px; max-height: 85%;
+    background: var(--eso-dark);
+    border: 2px solid var(--eso-gold);
+    border-radius: 8px;
+    padding: 15px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.9);
     z-index: 20;
-    pointer-events: none;
-}
-
-#sink-clock {
-    position: absolute;
-    top: 60%; 
-    right: 25%;
-    color: #ffd700; 
-    font-size: 2vw; 
-    font-weight: bold;
-    text-shadow: 0 0 10px #ffaa00, 0 0 20px #ffaa00; 
-    z-index: 20;
-    pointer-events: none; 
-}
-
-/* --- AVATAR CORNER (Right Side & Bigger) --- */
-#avatar-corner {
-    position: absolute;
-    bottom: 2%;
-    right: 2%; /* Moved to the right side */
-    z-index: 20;
-    display: flex; 
-    flex-direction: column;
-    align-items: flex-end; /* Aligns the menu to the right edge with the avatar */
-}
-
-#user-avatar {
-    width: 140px; /* Increased from 90px */
-    height: 140px; /* Increased from 90px */
-    border-radius: 50%;
-    border: 4px solid #d4af37; /* Slightly thicker border for the bigger size */
-    object-fit: cover;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.8);
-    cursor: pointer;
-    transition: transform 0.2s ease;
-}
-
-#user-avatar:hover {
-    transform: scale(1.05);
-}
-
-#avatar-stats-box {
-    position: absolute;
-    bottom: 160px; /* Moved up to clear the larger avatar head */
-    right: 0; /* Aligns menu with the right side of the avatar */
-    width: 260px; /* Slightly wider to fit the text better */
-    
-    /* Glassmorphism Styles */
-    background: rgba(20, 20, 20, 0.5); 
-    backdrop-filter: blur(10px); 
-    -webkit-backdrop-filter: blur(10px); 
-    border: 1px solid rgba(212, 175, 55, 0.3); 
-    border-radius: 12px;
-    padding: 15px; 
-    box-sizing: border-box; 
-    color: white;
-    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.6); 
-    
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-}
-
-#avatar-stats-box.hidden {
-    display: none;
-}
-    border: 1px solid rgba(212, 175, 55, 0.3); /* Made the border a bit softer */
-    border-radius: 12px;
-    padding: 50px 15px 15px 15px; 
-    width: 100%;
-    box-sizing: border-box; 
-    color: white;
-    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.6); /* Deeper, softer shadow for floating effect */
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-}
-
-.avatar-buttons {
-    display: flex;
-    gap: 10px;
-    width: 100%;
-}
-
-.avatar-buttons button {
-    flex: 1; 
-    background: #d4af37;
-    color: #121212;
-    border: none;
-    padding: 8px 5px;
-    cursor: pointer;
-    border-radius: 5px;
-    font-weight: bold;
-    font-size: 13px;
-    transition: background 0.2s;
-}
-
-.avatar-buttons button:hover {
-    background: #ffd700;
-}
-
-#account-balance {
-    text-align: center;
-    font-size: 16px;
-    font-weight: bold;
-    color: #d4af37;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-    padding-bottom: 8px;
-}
-
-#daily-info {
-    text-align: center;
-    font-size: 13px;
-    color: #ccc;
-}
-#hearth-zone {
-    position: absolute;
-    top: 45%;
-    left: 20%;
-    width: 15%;
-    height: 25%;
-    cursor: pointer;
-    z-index: 20;
-}
-
-/* --- AUDIO MENU --- */
-#audio-menu {
-    position: absolute;
-    top: 20%;
-    left: 10%;
-    background: rgba(20, 20, 20, 0.9);
-    border: 2px solid #d4af37;
-    border-radius: 10px;
-    padding: 20px;
-    color: white;
-    z-index: 30; /* Highest layer so it sits above everything */
-    width: 300px;
-}
-
-#audio-menu.hidden {
-    display: none;
-}
-
-.audio-section {
-    margin-bottom: 20px;
-}
-
-.audio-section label, .audio-section select {
-    display: block;
-    width: 100%;
-    margin-bottom: 10px;
-}
-
-.audio-section select {
-    padding: 5px;
-    background: #333;
-    color: white;
-    border: 1px solid #777;
-}
-
-/* Make standard audio players smaller to fit the theme */
-audio {
-    width: 100%;
-    height: 30px; 
-}
-
-#audio-menu button {
-    background: #555;
-    color: white;
-    border: none;
-    padding: 8px;
-    width: 100%;
-    cursor: pointer;
-}
-
-#audio-menu button:hover {
-    background: #777;
-}
-/* --- APP MODAL --- */
-#app-modal {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.7); /* Dark semi-transparent overlay */
-    z-index: 40; /* Highest layer so it sits above everything */
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-#app-modal.hidden {
-    display: none;
-}
-
-.modal-content {
-    background: #2a2a2a;
-    border: 2px solid #d4af37;
-    border-radius: 10px;
-    width: 80%;
-    max-width: 600px;
-    max-height: 80%;
-    display: flex;
-    flex-direction: column;
-    color: white;
-    box-shadow: 0 0 20px rgba(0,0,0,0.8);
-}
-
-.modal-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 15px 20px;
-    border-bottom: 1px solid #d4af37;
-}
-
-.modal-header h2 {
-    margin: 0;
-    color: #d4af37;
-}
-
-.close-btn {
-    font-size: 28px;
-    font-weight: bold;
-    cursor: pointer;
-    color: #aaa;
-}
-
-.close-btn:hover {
-    color: white;
-}
-
-#modal-body {
-    padding: 20px;
     overflow-y: auto;
-    flex-grow: 1;
+    backdrop-filter: blur(5px);
 }
 
-#modal-body textarea {
-    width: 100%;
-    height: 200px;
-    background: #1a1a1a;
-    color: white;
-    border: 1px solid #555;
-    padding: 10px;
-    font-family: inherit;
-    resize: vertical;
+#bookshelf-panel h3 {
+    color: var(--eso-gold);
+    margin: 0 0 10px 0;
+    border-bottom: 1px solid var(--eso-gold-dim);
+    padding-bottom: 5px;
+    font-size: 16px;
 }
 
-.modal-footer {
-    padding: 15px 20px;
-    border-top: 1px solid #d4af37;
-    text-align: right;
+.panel-section { margin-bottom: 20px; }
+
+/* Calendar Styles */
+#calendar-header { text-align: center; color: var(--eso-gold); margin-bottom: 10px; font-weight: bold;}
+#calendar-grid {
+    display: grid; grid-template-columns: repeat(7, 1fr); gap: 2px;
+}
+.cal-day {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--eso-gold-dim);
+    text-align: center; padding: 5px 0; cursor: pointer;
+    font-size: 14px; transition: 0.2s;
+}
+.cal-day:hover { background: var(--eso-gold-dim); color: black; }
+.past-day { opacity: 0.4; pointer-events: none; }
+.current-day { background: var(--eso-gold); color: black; font-weight: bold; }
+.has-appt { box-shadow: inset 0 0 8px #ffaa00; border-color: #ffaa00; }
+
+/* Collapsible Lists */
+.collapsible-header { cursor: pointer; display: flex; justify-content: space-between; }
+.collapsible-content { display: block; }
+.collapsible-content.hidden { display: none; }
+
+#market-input, #notes-input {
+    width: 100%; box-sizing: border-box; background: rgba(0,0,0,0.5);
+    border: 1px solid var(--eso-gold-dim); color: #e0d8c8; padding: 8px;
+    margin-bottom: 10px; font-family: inherit;
+}
+ul#market-list, ul#notes-list {
+    list-style-type: square; padding-left: 20px; margin: 0 0 10px 0;
+    color: #e0d8c8; font-size: 16px;
+}
+.clear-btn {
+    background: transparent; color: var(--eso-gold); border: 1px solid var(--eso-gold);
+    padding: 5px 10px; cursor: pointer; font-size: 12px; transition: 0.2s;
+}
+.clear-btn:hover { background: var(--eso-gold); color: black; }
+
+/* The Wax Seal */
+#wax-seal {
+    width: 60px; height: 60px;
+    background: #8b0000; /* Deep red wax */
+    border-radius: 50%; margin: 20px auto 0 auto;
+    border: 3px solid #5a0000; box-shadow: inset 0 0 10px rgba(0,0,0,0.8), 0 5px 10px rgba(0,0,0,0.6);
+    display: flex; justify-content: center; align-items: center;
+    cursor: pointer; transition: transform 0.2s;
+}
+#wax-seal:hover { transform: scale(1.1); }
+.seal-inner {
+    width: 45px; height: 45px; border-radius: 50%;
+    border: 2px dashed #b22222; display: flex;
+    justify-content: center; align-items: center;
+    color: #ffcba4; font-family: 'Cinzel', serif; font-size: 14px; font-weight: bold;
 }
 
-.modal-footer button {
-    background: #d4af37;
-    border: none;
-    padding: 8px 15px;
-    font-weight: bold;
-    cursor: pointer;
-    border-radius: 5px;
+/* --- TABLE OF CONTENTS MENU --- */
+#toc-modal {
+    position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+    background: var(--eso-dark); border: 2px solid var(--eso-gold);
+    padding: 30px; border-radius: 12px; z-index: 50; width: 400px;
+    box-shadow: 0 0 40px rgba(0,0,0,0.9); text-align: center;
+    backdrop-filter: blur(10px);
 }
+#toc-modal.hidden { display: none; }
+#toc-modal h2 { color: var(--eso-gold); margin-top: 0; }
+#toc-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 20px; }
+#toc-grid button {
+    background: rgba(0,0,0,0.5); border: 1px solid var(--eso-gold-dim);
+    color: #e0d8c8; padding: 10px; cursor: pointer; transition: 0.2s;
+}
+#toc-grid button:hover { background: var(--eso-gold); color: black; }
+.close-toc { background: #5a0000; border: 1px solid red; color: white; padding: 8px 20px; cursor: pointer;}
 
-.modal-footer button:hover {
-    background: #ffd700;
+/* --- EXISTING WIDGETS (Updated for ESO aesthetic) --- */
+#window-zone { position: absolute; top: 20%; right: 15%; width: 20%; height: 35%; z-index: 20; pointer-events: none;}
+#sink-clock { position: absolute; top: 60%; right: 25%; color: var(--eso-gold); font-size: 2vw; text-shadow: 0 0 10px #ffaa00; z-index: 20; pointer-events: none; }
+#avatar-corner { position: absolute; bottom: 2%; right: 2%; z-index: 30; display: flex; flex-direction: column; align-items: flex-end; }
+#user-avatar { width: 140px; height: 140px; border-radius: 50%; border: 4px solid var(--eso-gold); object-fit: cover; cursor: pointer; transition: 0.2s;}
+#user-avatar:hover { transform: scale(1.05); }
+#avatar-stats-box {
+    position: absolute; bottom: 160px; right: 0; width: 260px;
+    background: var(--eso-dark); backdrop-filter: blur(10px); border: 1px solid var(--eso-gold-dim);
+    padding: 15px; border-radius: 12px; display: flex; flex-direction: column; gap: 12px;
 }
+#avatar-stats-box.hidden { display: none; }
+.avatar-buttons button, .modal-footer button { background: var(--eso-gold); color: black; border: none; padding: 8px; cursor: pointer; font-weight: bold; border-radius: 4px;}
+
+/* ESO Modal overrides */
+#app-modal { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 60; display: flex; justify-content: center; align-items: center; }
+#app-modal.hidden { display: none; }
+.modal-content { background: var(--eso-dark); border: 2px solid var(--eso-gold); width: 80%; max-width: 600px; color: #e0d8c8; border-radius: 8px; box-shadow: 0 0 30px rgba(0,0,0,1); }
+.modal-header { display: flex; justify-content: space-between; padding: 15px; border-bottom: 1px solid var(--eso-gold-dim); }
+.modal-header h2 { margin: 0; color: var(--eso-gold); }
+.close-btn { font-size: 28px; cursor: pointer; color: var(--eso-gold); }
+#modal-body { padding: 20px; }
+#modal-body textarea { width: 100%; height: 200px; background: rgba(0,0,0,0.6); color: #e0d8c8; border: 1px solid var(--eso-gold-dim); padding: 10px; font-family: inherit; }
+.modal-footer { padding: 15px; border-top: 1px solid var(--eso-gold-dim); text-align: right; }
