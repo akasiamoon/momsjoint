@@ -1,39 +1,50 @@
-/* --- ESO CORE STYLES --- */
+/* --- 1. CORE SYSTEM & RESET --- */
 :root {
     --eso-gold: #cda24b;
     --eso-gold-dim: #8b6d32;
     --eso-dark: rgba(15, 15, 15, 0.92);
-    --glow: 0 0 15px rgba(205, 162, 75, 0.5);
+    --eso-glow: 0 0 15px rgba(205, 162, 75, 0.5);
+    --eso-text: #e0d8c8;
 }
 
 body, html {
-    margin: 0; padding: 0; width: 100%; height: 100%;
+    margin: 0;
+    padding: 0;
+    width: 100vw;
+    height: 100vh;
     background-color: #000;
     font-family: 'Cormorant Garamond', serif;
-    color: #e0d8c8;
-    overflow: hidden;
+    color: var(--eso-text);
+    overflow: hidden; /* Prevents scrolling so the kitchen stays a dashboard */
 }
 
 .app-container {
     position: relative;
     width: 100%;
-    max-width: 1200px;
-    margin: 0 auto;
+    height: 100%;
     overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
+/* --- 2. THE BACKGROUND (Anti-Zoom Fix) --- */
 #bg-image {
+    position: absolute;
+    top: 0;
+    left: 0;
     width: 100%;
-    display: block;
+    height: 100%;
+    object-fit: cover; /* This makes the image fit the screen perfectly without zooming in too much */
     z-index: 1;
 }
 
-/* --- ATMOSPHERE & SHIMMER --- */
+/* --- 3. THE ATMOSPHERE (Room Breathing Animation) --- */
 .atmosphere-overlay {
     position: absolute;
     top: 0; left: 0;
     width: 100%; height: 100%;
-    pointer-events: none;
+    pointer-events: none; /* Allows clicking through the "air" */
     z-index: 5;
     background: radial-gradient(circle at 50% 50%, rgba(205, 162, 75, 0.05), transparent);
     animation: roomBreathe 10s ease-in-out infinite;
@@ -41,16 +52,61 @@ body, html {
 
 @keyframes roomBreathe {
     0%, 100% { opacity: 0.3; transform: scale(1); }
-    50% { opacity: 0.7; transform: scale(1.01); }
+    50% { opacity: 0.7; transform: scale(1.02); }
 }
 
-/* --- CLICK ZONES --- */
+/* --- 4. INTERACTIVE CLICK ZONES --- */
 #bookshelf-trigger, #hearth-trigger, #table-trigger {
     position: absolute;
     z-index: 10;
     cursor: pointer;
+    transition: background 0.3s, box-shadow 0.3s;
 }
 
-#bookshelf-trigger { top: 5%; left: 3%; width: 20%; height: 60%; }
-#hearth-trigger { top: 45%; left: 20%; width: 15%; height: 25%; }
-#table-trigger { bottom: 10%; right: 25%; width
+#bookshelf-trigger { top: 5%; left: 3%; width: 18%; height: 60%; }
+#hearth-trigger { top: 45%; left: 22%; width: 12%; height: 25%; }
+#table-trigger { bottom: 8%; right: 28%; width: 22%; height: 25%; }
+
+#bookshelf-trigger:hover, #hearth-trigger:hover {
+    background: rgba(205, 162, 75, 0.05);
+    box-shadow: inset 0 0 30px rgba(205, 162, 75, 0.1);
+}
+
+/* --- 5. THE BOOKSHELF PANEL (Almanac & Lists) --- */
+#bookshelf-panel {
+    position: absolute;
+    top: 5%; left: 3%;
+    width: 300px;
+    max-height: 85%;
+    background: var(--eso-dark);
+    border: 2px solid var(--eso-gold);
+    border-radius: 4px;
+    padding: 20px;
+    z-index: 50;
+    overflow-y: auto;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 0 40px rgba(0,0,0,0.8);
+    animation: slideIn 0.4s ease-out;
+}
+
+#bookshelf-panel.hidden { display: none !important; }
+
+@keyframes slideIn {
+    from { opacity: 0; transform: translateX(-30px); }
+    to { opacity: 1; transform: translateX(0); }
+}
+
+/* --- 6. THE ALMANAC --- */
+.almanac-title {
+    text-align: center;
+    color: var(--eso-gold);
+    font-family: 'Cinzel', serif;
+    font-size: 1.2rem;
+    letter-spacing: 2px;
+    border-bottom: 1px solid var(--eso-gold-dim);
+    padding-bottom: 10px;
+}
+
+#almanac-header { display: flex; justify-content: space-between; align-items: center; margin: 10px 0; }
+.almanac-nav { background: none; border: none; color: var(--eso-gold); cursor: pointer; font-size: 1.2rem; transition: 0.3s; }
+.al
