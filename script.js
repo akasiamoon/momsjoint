@@ -11,10 +11,12 @@ let currentAudio = null;
 
 // --- 2. DATA HANDLING ---
 let appData = JSON.parse(localStorage.getItem('moonshearthData')) || {};
-// Force-Initialize essential folders
 if (!appData.market) appData.market = [];
 if (!appData.vault) appData.vault = 0.00;
 if (!appData.events) appData.events = {};
+// Ensure dynamic app data exists
+const dynamicApps = ['tea-log', 'cat-log', 'phoebe-journal', 'tripp-journal', 'cory-journal', 'personal-journal', 'objectives', 'provisions', 'budget-ledger', 'important-numbers', 'master-journal'];
+dynamicApps.forEach(app => { if(!appData[app]) appData[app] = ""; });
 
 function save() {
     localStorage.setItem('moonshearthData', JSON.stringify(appData));
@@ -25,14 +27,14 @@ function save() {
 // --- 3. STARTUP ---
 window.onload = function() {
     updateEnvironment();
-    fetchWeather(); // Call immediately
+    fetchWeather();
     renderAlmanac();
     fetchHolyWise();
     save();
     renderList('market');
     
     setInterval(updateEnvironment, 60000); 
-    setInterval(fetchWeather, 300000); // Check weather every 5 mins
+    setInterval(fetchWeather, 300000);
 };
 
 // --- 4. ENVIRONMENT & WEATHER ---
@@ -57,7 +59,7 @@ async function fetchWeather() {
         else tDisp.innerText = "--°";
     } catch(e) { 
         console.warn("Weather Error:", e); 
-        tDisp.innerText = "?"; // Indicator that it tried but failed
+        tDisp.innerText = "--°"; 
     }
 }
 
@@ -105,9 +107,8 @@ function toggleSection(id) { document.getElementById(id).classList.toggle('hidde
 function closeModal() { document.getElementById('app-modal').classList.add('hidden'); }
 
 function openApp(appId) {
-    // Hide menus so they don't block the view
     document.getElementById('toc-modal').classList.add('hidden');
-    document.getElementById('avatar-stats-box').classList.add('hidden');
+    document.getElementById('avatar-stats-box').classList.add('hidden'); // Close menu
     
     const m = document.getElementById('app-modal');
     m.setAttribute('data-app', appId);
@@ -118,10 +119,8 @@ function openApp(appId) {
     document.getElementById('modal-instructions').innerText = inst;
     
     const ta = document.getElementById('app-input');
-    // Load data, or default empty string
     ta.value = appData[appId] || "";
     
-    // Smart Timestamp Logic
     ta.onkeydown = function(e) {
         if (e.key === "Enter") {
             e.preventDefault();
@@ -140,7 +139,6 @@ function saveModal() {
     const text = document.getElementById('app-input').value;
     appData[appId] = text;
     
-    // Ledger Math
     if (appId === 'budget-ledger') {
         let bal = 0;
         text.split('\n').forEach(line => {
