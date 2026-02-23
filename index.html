@@ -12,7 +12,7 @@
 <div class="app-wrapper">
     <div class="kitchen-stage">
         
-        <img src="momsjointday.jpg" id="bg-image" alt="Kitchen">
+        <img src="momsjointday.jpg" id="bg-image" alt="Kitchen Environment">
         <div id="seasonal-overlay"></div>
         <div class="atmosphere-overlay"></div>
         <div id="decor-layer"></div>
@@ -21,10 +21,9 @@
         <div id="hearth-trigger" class="trigger" onclick="togglePanel('audio-menu')" title="Soundscapes"></div>
         <div id="table-trigger" class="trigger" onclick="openApp('budget-ledger')" title="Budget Ledger"></div>
 
-        <div id="weather-orb" title="Local Skies">
+        <div id="weather-orb" title="Current Conditions: Farmington, MS">
             <div class="orb-content">
                 <span id="orb-temp">--°</span>
-                <span id="orb-desc">Scrying...</span>
                 <span id="orb-loc">Farmington</span>
             </div>
         </div>
@@ -37,12 +36,29 @@
         <div id="avatar-corner">
             <div id="avatar-stats-box" class="panel glass hidden">
                 <h2 class="panel-title">Keeper Amber <span class="dismiss" onclick="togglePanel('avatar-stats-box')">Dismiss</span></h2>
-                <div class="stat-row"><span>Vault Balance</span> <span id="vault-balance" style="color: var(--eso-gold); font-weight: bold;">0.00</span></div>
-                <div class="stat-row"><span>Region</span> <span>Farmington & Adamsville</span></div>
-                <button onclick="togglePanel('toc-modal'); togglePanel('avatar-stats-box');">Open Tome</button>
-                <div class="action-grid">
-                    <button onclick="exportData()">Export</button>
-                    <button onclick="document.getElementById('import-file').click()">Load</button>
+                
+                <div class="stat-row">
+                    <span>Vault Balance</span> 
+                    <span id="vault-balance" style="color: var(--eso-gold); font-weight: bold;">0.00</span>
+                </div>
+
+                <div class="menu-section">
+                    <h3>Quick Logs</h3>
+                    <div class="action-grid">
+                        <button onclick="openApp('tea-log')">☕ Tea</button>
+                        <button onclick="openApp('cat-log')">🐈 Cat</button>
+                        <button onclick="openApp('phoebe-journal')">Phoebe</button>
+                        <button onclick="openApp('tripp-journal')">Tripp</button>
+                    </div>
+                </div>
+
+                <div class="menu-section">
+                    <h3>System</h3>
+                    <button onclick="openApp('master-journal')">📖 Open Full Tome</button>
+                    <div class="action-grid">
+                        <button onclick="exportData()">Export</button>
+                        <button onclick="document.getElementById('import-file').click()">Load</button>
+                    </div>
                     <input type="file" id="import-file" class="hidden" onchange="importData(event)" accept=".json">
                 </div>
             </div>
@@ -63,9 +79,9 @@
                 <h3 onclick="toggleSection('market-content')" style="cursor: pointer; border-bottom: 1px solid var(--eso-gold-dim);">Market List</h3>
                 <div id="market-content" class="hidden">
                     <input type="text" id="market-search" placeholder="Search #tags..." onkeyup="filterList('market')">
-                    <input type="text" id="market-input" placeholder="Inscribe item... (Hit Enter)" onkeypress="handleLog(event, 'market')">
+                    <input type="text" id="market-input" placeholder="Add item... (Hit Enter)" onkeypress="handleLog(event, 'market')">
                     <ul id="market-list"></ul>
-                    <button class="clear-btn" onclick="clearList('market')" style="background: transparent; border: 1px solid #5a0000; color: #ff6b6b; margin-top: 10px;">Purge List</button>
+                    <button class="clear-btn" onclick="clearList('market')">Purge List</button>
                 </div>
             </div>
         </div>
@@ -83,7 +99,7 @@
                 <button onclick="playAudio('momsjointdark.mp3')">Dark</button>
                 <button onclick="playAudio('momsjointflute.mp3')">Flute</button>
             </div>
-            <button onclick="stopAudio()" style="background: #2a0808; border-color: #5a0000; color: #ff6b6b; margin-top: 10px;">Silence</button>
+            <button onclick="stopAudio()" style="background: #2a0808; border-color: #5a0000; color: #ff6b6b; margin-top: 10px;">Silence All</button>
         </div>
 
         <div id="toc-modal" class="modal hidden">
@@ -94,15 +110,13 @@
                     <button onclick="openApp('provisions')">Provisions (Meals)</button>
                     <button onclick="openApp('budget-ledger')">Budget Ledger</button>
                     <button onclick="openApp('important-numbers')">Important Numbers</button>
-                    <button onclick="openApp('phoebe-journal')">Phoebe</button>
-                    <button onclick="openApp('tripp-journal')">Tripp</button>
                     <button onclick="openApp('cory-journal')">Cory</button>
-                    <button onclick="openApp('personal-journal')">Personal</button>
+                    <button onclick="openApp('personal-journal')">Personal Journal</button>
                 </div>
                 <div class="holy-wise-section">
-                    <h3 style="color: var(--eso-gold); font-family: 'Cinzel'; margin-bottom: 5px;">Daily Wisdom</h3>
-                    <p id="daily-verse" style="margin-top: 0;">Consulting the heavens...</p>
-                    <p id="daily-affirmation" style="color: var(--eso-gold-dim);">Drawing strength...</p>
+                    <h3>Daily Wisdom</h3>
+                    <p id="daily-verse">Consulting the heavens...</p>
+                    <p id="daily-affirmation">Drawing strength...</p>
                 </div>
             </div>
         </div>
