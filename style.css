@@ -71,22 +71,56 @@ body, html {
     position: absolute;
     bottom: 2%;
     left: 2%;
-    background: rgba(0, 0, 0, 0.6);
+    background: rgba(0, 0, 0, 0.7);
     color: white;
     padding: 15px;
     border-radius: 10px;
     border: 1px solid #d4af37;
     z-index: 20;
+    
+    /* Flexbox helps center the avatar and stack the text neatly */
+    display: flex; 
+    flex-direction: column;
+    align-items: center; 
+    gap: 10px; 
+    width: 220px;
 }
 
-#avatar-corner button {
+#user-avatar {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%; /* Makes it a perfect circle */
+    border: 2px solid #d4af37; /* Golden border */
+    object-fit: cover; /* Ensures the image doesn't stretch or squish */
+    box-shadow: 0 0 10px rgba(0,0,0,0.5);
+}
+
+.avatar-buttons {
+    display: flex;
+    gap: 10px;
+    width: 100%;
+}
+
+.avatar-buttons button {
+    flex: 1; /* Makes the export and load buttons equal size */
     background: #d4af37;
+    color: #121212;
     border: none;
-    padding: 5px 10px;
+    padding: 8px 5px;
     cursor: pointer;
     border-radius: 5px;
-    margin-bottom: 10px;
     font-weight: bold;
+    font-size: 12px;
+}
+
+.avatar-buttons button:hover {
+    background: #ffd700;
+}
+
+#account-balance, #daily-info {
+    width: 100%;
+    text-align: center;
+    font-size: 14px;
 }
 
 #hearth-zone {
