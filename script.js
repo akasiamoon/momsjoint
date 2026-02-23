@@ -240,15 +240,15 @@ function updateEnvironment() {
     const hour = new Date().getHours();
     const bgImage = document.getElementById('bg-image');
     // EDIT THESE IMAGE NAMES
-    if (hour >= 6 && hour < 17) bgImage.src = "YOUR_DAY_IMAGE.jpg";      
-    else if (hour >= 17 && hour < 20) bgImage.src = "YOUR_SUNSET_IMAGE.jpg";   
-    else bgImage.src = "YOUR_NIGHT_IMAGE.jpg";    
+    if (hour >= 6 && hour < 17) bgImage.src = "momsjointday.jpg";      
+    else if (hour >= 17 && hour < 20) bgImage.src = "momsjointsunset.jpg";   
+    else bgImage.src = "momsjointnight.jpg";    
 }
 updateEnvironment();
 setInterval(updateEnvironment, 3600000); 
 
 const WEATHER_API_KEY = "YOUR_API_KEY_HERE"; 
-const ZIP_CODE = "YOUR_ZIP_CODE"; 
+const ZIP_CODE = "38834"; 
 
 async function updateWeatherWindow() {
     if (WEATHER_API_KEY === "YOUR_API_KEY_HERE") return; 
