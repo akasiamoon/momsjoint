@@ -10,7 +10,7 @@ body, html {
 .app-container {
     position: relative;
     width: 100%;
-    max-width: 1200px; /* Adjust based on your preference */
+    max-width: 1200px; 
     margin: 0 auto;
     overflow: hidden;
 }
@@ -20,29 +20,30 @@ body, html {
     display: block;
 }
 
-/* --- WIDGETS --- */
-
-#sink-clock {
+/* --- INVISIBLE GRID --- */
+#hidden-link-grid {
     position: absolute;
-    /* You will need to tweak these percentages to sit perfectly on the sink */
-    top: 60%; 
-    right: 25%;
-    color: #ffd700; /* Golden color */
-    font-size: 2vw; /* Scales with screen size */
-    font-weight: bold;
-    text-shadow: 0 0 10px #ffaa00, 0 0 20px #ffaa00; /* Glowing effect */
-    pointer-events: none; /* So you can't accidentally click the text */
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: grid;
+    /* 5 columns, 4 rows = 20 total blocks */
+    grid-template-columns: repeat(5, 1fr);
+    grid-template-rows: repeat(4, 1fr);
+    z-index: 10; 
 }
 
-#hearth-zone {
-    position: absolute;
-    top: 45%;
-    left: 20%;
-    width: 15%;
-    height: 25%;
+.hidden-item {
     cursor: pointer;
-    /* border: 2px solid red; Uncomment to see where the box is while testing */
+    transition: background 0.3s ease;
 }
+
+.hidden-item:hover {
+    background: rgba(255, 255, 255, 0.05); 
+}
+
+/* --- WIDGETS --- */
 
 #window-zone {
     position: absolute;
@@ -50,8 +51,20 @@ body, html {
     right: 15%;
     width: 20%;
     height: 35%;
+    z-index: 20;
     pointer-events: none;
-    /* We will inject CSS animations here later for rain/snow */
+}
+
+#sink-clock {
+    position: absolute;
+    top: 60%; 
+    right: 25%;
+    color: #ffd700; 
+    font-size: 2vw; 
+    font-weight: bold;
+    text-shadow: 0 0 10px #ffaa00, 0 0 20px #ffaa00; 
+    z-index: 20;
+    pointer-events: none; 
 }
 
 #avatar-corner {
@@ -63,6 +76,7 @@ body, html {
     padding: 15px;
     border-radius: 10px;
     border: 1px solid #d4af37;
+    z-index: 20;
 }
 
 #avatar-corner button {
@@ -72,20 +86,69 @@ body, html {
     cursor: pointer;
     border-radius: 5px;
     margin-bottom: 10px;
+    font-weight: bold;
 }
 
-/* --- HIDDEN LINKS --- */
-
-.hidden-link {
+#hearth-zone {
     position: absolute;
+    top: 45%;
+    left: 20%;
+    width: 15%;
+    height: 25%;
     cursor: pointer;
-    /* border: 2px solid blue;  Uncomment to help map your items! */
+    z-index: 20;
 }
 
-/* Tweak these percentages to place the invisible box over the recipe book, etc. */
-#link-recipe-book {
-    bottom: 15%;
-    right: 35%;
-    width: 15%;
-    height: 10%;
+/* --- AUDIO MENU --- */
+#audio-menu {
+    position: absolute;
+    top: 20%;
+    left: 10%;
+    background: rgba(20, 20, 20, 0.9);
+    border: 2px solid #d4af37;
+    border-radius: 10px;
+    padding: 20px;
+    color: white;
+    z-index: 30; /* Highest layer so it sits above everything */
+    width: 300px;
+}
+
+#audio-menu.hidden {
+    display: none;
+}
+
+.audio-section {
+    margin-bottom: 20px;
+}
+
+.audio-section label, .audio-section select {
+    display: block;
+    width: 100%;
+    margin-bottom: 10px;
+}
+
+.audio-section select {
+    padding: 5px;
+    background: #333;
+    color: white;
+    border: 1px solid #777;
+}
+
+/* Make standard audio players smaller to fit the theme */
+audio {
+    width: 100%;
+    height: 30px; 
+}
+
+#audio-menu button {
+    background: #555;
+    color: white;
+    border: none;
+    padding: 8px;
+    width: 100%;
+    cursor: pointer;
+}
+
+#audio-menu button:hover {
+    background: #777;
 }
