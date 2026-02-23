@@ -20,17 +20,16 @@ body, html {
 .app-wrapper {
     display: flex; justify-content: center; align-items: center;
     width: 100vw; height: 100vh;
+    background: #000;
 }
 
 .kitchen-stage {
     position: relative;
-    width: 100%; height: 100%;
-    /* 16:9 Aspect Ratio Lock */
-    max-width: calc(100vh * (16 / 9)); 
-    max-height: calc(100vw * (9 / 16));
+    /* Strict 16:9 Aspect Ratio */
+    width: 100%; max-width: 177.78vh; 
+    height: 56.25vw; max-height: 100vh;
     margin: auto; 
-    /* THIS WAS THE CULPRIT. Setting it to visible ensures menus aren't cut off */
-    overflow: visible; 
+    overflow: hidden; /* Keeps overlay contained */
     box-shadow: 0 0 50px #000;
 }
 
@@ -38,8 +37,6 @@ body, html {
     position: absolute; top: 0; left: 0; 
     width: 100%; height: 100%; 
     object-fit: cover; z-index: 1; 
-    /* Image needs hidden overflow so it doesn't spill, but container needs visible for menus */
-    clip-path: inset(0 0 0 0); 
 }
 
 /* LAYERS */
@@ -67,12 +64,11 @@ body, html {
 }
 .panel { 
     position: absolute; z-index: 50; padding: 20px; border-radius: 2px;
-    /* FIX: Scroll if too tall */
-    max-height: 70vh; 
-    overflow-y: auto; 
+    max-height: 70vh; overflow-y: auto; 
 }
-.panel-title { font-family: 'Cinzel'; color: var(--eso-gold); border-bottom: 1px solid var(--eso-gold-dim); padding-bottom: 8px; margin-top: 0; font-size: 1.2rem; }
-.dismiss { float: right; font-size: 0.7rem; color: #ff6b6b; cursor: pointer; font-family: 'Cinzel'; border: 1px solid #5a0000; padding: 2px 5px; }
+.panel-title { font-family: 'Cinzel'; color: var(--eso-gold); margin: 0; font-size: 1.2rem; }
+.panel-header { display: flex; justify-content: space-between; border-bottom: 1px solid var(--eso-gold-dim); padding-bottom: 8px; margin-bottom: 10px; }
+.dismiss { font-size: 0.7rem; color: #ff6b6b; cursor: pointer; font-family: 'Cinzel'; border: 1px solid #5a0000; padding: 2px 5px; }
 .dismiss:hover { background: #5a0000; color: #fff; }
 .hidden { display: none !important; }
 
@@ -88,12 +84,26 @@ body, html {
 #orb-temp { font-family: 'Cinzel'; font-size: 2.5rem; color: var(--eso-gold); text-shadow: 2px 2px 5px #000; line-height: 1; }
 #orb-loc { font-size: 0.75rem; color: var(--eso-gold-dim); font-family: 'Cinzel'; text-transform: uppercase; margin-top: 5px; }
 
-/* AVATAR & GOBLIN */
-#avatar-corner { position: absolute; bottom: 3%; right: 2%; z-index: 100; display: flex; flex-direction: column; align-items: flex-end; }
-#user-avatar { width: 140px; height: 140px; border-radius: 50%; border: 3px solid var(--eso-gold); cursor: pointer; box-shadow: 0 0 20px #000; object-fit: cover; flex-shrink: 0; transition: 0.3s; }
+/* AVATAR & MENU POSITIONING */
+#avatar-corner { 
+    position: absolute; bottom: 3%; right: 2%; z-index: 100; 
+    display: flex; flex-direction: column; align-items: flex-end; 
+}
+#user-avatar { 
+    width: 140px; height: 140px; border-radius: 50%; 
+    border: 3px solid var(--eso-gold); cursor: pointer; 
+    box-shadow: 0 0 20px #000; object-fit: cover; flex-shrink: 0; 
+    transition: 0.3s; 
+}
 #user-avatar:hover { transform: scale(1.05); box-shadow: var(--glow); }
-/* FIX: Positioning the menu so it opens UP safely */
-#avatar-stats-box { width: 320px; margin-bottom: 20px; right: 10px; bottom: 150px; position: fixed; }
+
+/* FIX: The menu opens ABOVE the avatar */
+#avatar-stats-box { 
+    width: 320px; 
+    position: absolute; 
+    bottom: 150px; /* Pushes it up */
+    right: 0; 
+}
 
 #ai-familiar-corner { position: absolute; bottom: 3%; left: 2%; z-index: 100; display: flex; align-items: flex-end; cursor: pointer; }
 #ai-goblin { width: 100px; height: 100px; border-radius: 50%; border: 2px solid var(--eso-gold-dim); object-fit: cover; flex-shrink: 0; }
@@ -114,10 +124,13 @@ button { background: linear-gradient(145deg, #cda24b, #8b6d32); border: 1px soli
 button:hover { filter: brightness(1.2); box-shadow: var(--glow); }
 .action-grid, .toc-grid, .audio-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 5px; }
 .menu-section { margin-top: 15px; border-top: 1px solid rgba(205, 162, 75, 0.2); padding-top: 10px; }
+.gold-text { color: var(--eso-gold); margin: 0; font-family: 'Cinzel'; }
+.clickable-header { cursor: pointer; color: var(--eso-gold); margin-bottom: 5px; }
 
 input[type="text"], textarea { width: 100%; background: rgba(0,0,0,0.6); border: 1px solid var(--eso-gold-dim); color: var(--text-cream); padding: 10px; font-family: inherit; margin-top: 5px; outline: none; }
 textarea { height: 250px; resize: none; font-size: 1.1rem; }
 .clear-btn { background: transparent; border: 1px solid #5a0000; color: #ff6b6b; margin-top: 10px; }
+.silence-btn { background: #2a0808; border-color: #5a0000; color: #ff6b6b; margin-top: 10px; }
 .stat-row { display: flex; justify-content: space-between; padding: 5px 0; }
 
 /* MODALS */
