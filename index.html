@@ -14,15 +14,22 @@
 
     <div id="table-zone" onclick="openApp('contingency-ledger')" title="Open Contingency Ledger"></div>
 
-    <div id="bookshelf-panel">
-        
-        <div class="panel-section">
-            <h3><span class="icon">📅</span> Calendar</h3>
-            <div id="calendar-header">
-                <span id="month-year-display"></span>
+    <div class="almanac-section">
+            <h2 class="almanac-title">The Almanac</h2>
+            <div id="almanac-header">
+                <button onclick="changeMonth(-1)" class="almanac-nav">&#10094;</button>
+                <span id="almanac-month-year"></span>
+                <button onclick="changeMonth(1)" class="almanac-nav">&#10095;</button>
             </div>
-            <div id="calendar-grid">
+            <div class="almanac-weekdays">
+                <span>S</span><span>M</span><span>T</span><span>W</span><span>T</span><span>F</span><span>S</span>
+            </div>
+            <div id="almanac-grid">
                 </div>
+            <div id="almanac-details">
+                <p id="almanac-info">Select a day to view its records.</p>
+            </div>
+        </div>
         </div>
 
         <div class="panel-section">
