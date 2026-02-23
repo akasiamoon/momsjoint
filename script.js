@@ -51,7 +51,11 @@ function changeAudio(type) {
         player.play();
     }
 }
-
+// --- 5. AVATAR MENU TOGGLE ---
+function toggleAvatarMenu() {
+    const menu = document.getElementById('avatar-stats-box');
+    menu.classList.toggle('hidden');
+}
 // --- 4. HIDDEN LINKS INTERFACE & DATA MANAGEMENT ---
 
 const appTitles = {
