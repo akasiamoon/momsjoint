@@ -61,11 +61,6 @@ body, html {
 .dismiss:hover { color: #fff; text-shadow: var(--glow); }
 .hidden { display: none !important; }
 
-/* CHRONOS WIDGET (Sink) */
-#chronos-widget { position: absolute; top: 60%; right: 25%; z-index: 30; text-align: center; pointer-events: none; }
-#sink-clock { font-family: 'Cinzel'; font-size: 2.8cqw; color: var(--eso-gold); text-shadow: 2px 2px 5px #000, var(--glow); }
-#sink-temp-ms, #sink-temp-tn { font-size: 1cqw; text-shadow: 1px 1px 3px #000; letter-spacing: 1px; color: #fff; }
-
 /* AVATAR & AI FAMILIAR */
 #avatar-corner { position: absolute; bottom: 3%; right: 2%; z-index: 100; display: flex; flex-direction: column; align-items: flex-end; }
 #user-avatar { width: 10cqw; height: 10cqw; border-radius: 50%; border: 2px solid var(--eso-gold); cursor: pointer; box-shadow: 0 0 20px #000; object-fit: cover; }
