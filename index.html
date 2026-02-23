@@ -3,63 +3,79 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard</title>
+    <title>Tamriel Cozy Kitchen</title>
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Cormorant+Garamond:wght@400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 <div class="app-container">
     <div class="atmosphere-overlay"></div>
-    
     <img src="momsjointdawn.jpg" id="bg-image">
 
-    <div id="bookshelf-trigger" onclick="toggleBookshelf()"></div>
-    <div id="hearth-trigger" onclick="toggleAudioMenu()"></div>
-    <div id="table-trigger" onclick="openApp('contingency-ledger')"></div>
+    <div id="bookshelf-trigger" onclick="toggleBookshelf()" title="Almanac & Records"></div>
+    <div id="hearth-trigger" onclick="toggleAudioMenu()" title="Hearth Sounds"></div>
+    <div id="table-trigger" onclick="openApp('contingency-ledger')" title="Table Ledger"></div>
 
     <div id="bookshelf-panel" class="hidden">
         <h2 class="almanac-title">The Almanac</h2>
         <div id="almanac-header">
-            <button onclick="changeMonth(-1)">&#10094;</button>
+            <button onclick="changeMonth(-1)" class="almanac-nav">&#10094;</button>
             <span id="almanac-month-year"></span>
-            <button onclick="changeMonth(1)">&#10095;</button>
+            <button onclick="changeMonth(1)" class="almanac-nav">&#10095;</button>
         </div>
+        <div class="almanac-weekdays"><span>S</span><span>M</span><span>T</span><span>W</span><span>T</span><span>F</span><span>S</span></div>
         <div id="almanac-grid"></div>
-        <div id="almanac-details"><p id="almanac-info">Select a day...</p></div>
+        <div id="almanac-details"><p id="almanac-info">Select a day to view its records.</p></div>
 
         <div class="panel-section">
-            <h3 onclick="toggleSection('market-content')">Market List</h3>
-            <div id="market-content" class="collapsible-content">
-                <input type="text" id="market-input" onkeypress="handleEnter(event, 'market')">
+            <h3 onclick="toggleSection('market-content')">Market List <span class="arrow">▼</span></h3>
+            <div id="market-content" class="collapsible-content hidden">
+                <input type="text" id="market-input" onkeypress="handleEnter(event, 'market')" placeholder="Inscribe...">
                 <ul id="market-list"></ul>
-                <button onclick="clearList('market')">Clear</button>
+                <button class="clear-btn" onclick="clearList('market')">Clear</button>
             </div>
         </div>
 
         <div id="wax-seal" onclick="toggleTOC()"><div class="seal-inner">TOC</div></div>
     </div>
 
-    <div id="sink-clock">00:00 AM</div>
+    <div id="sink-clock">00:00</div>
     <div id="window-zone"></div>
-
     <audio id="ambient-player" loop></audio>
     <audio id="primary-player"></audio>
 
-    <div id="toc-modal" class="hidden">
-        <div id="toc-grid">
-            <button onclick="openApp('todo')">To Do</button>
-            <button onclick="openApp('weekly-meal-plan')">Meal Plan</button>
-            <button onclick="openApp('budget-ledger')">Budget</button>
+    <div id="avatar-corner">
+        <img src="avatar.jpg" id="user-avatar" onclick="toggleAvatarMenu()">
+        <div id="avatar-stats-box" class="hidden">
+            <button onclick="exportData()">💾 Export Scroll</button>
+            <button onclick="document.getElementById('import-file').click()">📂 Load Scroll</button>
+            <input type="file" id="import-file" style="display:none" onchange="importData(event)">
+            <div id="account-balance">Vault: $0.00</div>
         </div>
-        <button onclick="toggleTOC()">Close</button>
+    </div>
+
+    <div id="toc-modal" class="hidden">
+        <h2>Table of Contents</h2>
+        <div id="toc-grid">
+            <button onclick="openApp('todo')">To Do List</button>
+            <button onclick="openApp('weekly-meal-plan')">Meal Plan</button>
+            <button onclick="openApp('bible-verse')">Bible Verse</button>
+            <button onclick="openApp('budget-ledger')">Budget</button>
+            <button onclick="openApp('phoebe')">Phoebe</button>
+            <button onclick="openApp('tripp')">Tripp</button>
+            <button onclick="openApp('cory')">Cory</button>
+        </div>
+        <button class="close-btn" onclick="toggleTOC()">Close</button>
     </div>
 
     <div id="app-modal" class="hidden">
         <div class="modal-content">
-            <h2 id="modal-title"></h2>
+            <div class="modal-header">
+                <h2 id="modal-title"></h2>
+                <span class="close-x" onclick="closeModal()">&times;</span>
+            </div>
             <div id="modal-body"></div>
-            <button onclick="saveModalData()">Inscribe</button>
-            <button onclick="closeModal()">Close</button>
+            <div class="modal-footer"><button onclick="saveModalData()">Inscribe to Ledger</button></div>
         </div>
     </div>
 </div>
