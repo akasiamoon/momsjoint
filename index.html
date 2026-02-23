@@ -18,16 +18,16 @@
     <div id="hearth-trigger" onclick="toggleAudioMenu()" title="Open Soundscapes"></div>
     <div id="table-trigger" onclick="openApp('contingency-ledger')" title="Open Contingency Ledger"></div>
 
-    <div id="bookshelf-panel" class="hidden">
+    <div id="bookshelf-panel" class="hidden glass">
         <h2 class="almanac-title">
             The Almanac
-            <span class="almanac-close" onclick="toggleBookshelf()">&times;</span>
+            <span class="close-text" onclick="toggleBookshelf()">Dismiss</span>
         </h2>
         
         <div id="almanac-header">
-            <button onclick="changeMonth(-1)" class="almanac-nav">&#10094;</button>
+            <button onclick="changeMonth(-1)" class="almanac-nav">Prev</button>
             <span id="almanac-month-year"></span>
-            <button onclick="changeMonth(1)" class="almanac-nav">&#10095;</button>
+            <button onclick="changeMonth(1)" class="almanac-nav">Next</button>
         </div>
 
         <div class="almanac-weekdays">
@@ -42,11 +42,11 @@
         </div>
 
         <div class="panel-section">
-            <h3 onclick="toggleSection('market-content')">Market List <span class="arrow">▼</span></h3>
+            <h3 onclick="toggleSection('market-content')">Market List</h3>
             <div id="market-content" class="collapsible-content hidden">
                 <input type="text" id="market-input" placeholder="Inscribe item..." onkeypress="handleEnter(event, 'market')">
                 <ul id="market-list"></ul>
-                <button class="clear-btn" onclick="clearList('market')">Clear List</button>
+                <button class="clear-btn" onclick="clearList('market')">Purge List</button>
             </div>
         </div>
 
@@ -62,44 +62,54 @@
     <audio id="primary-player"></audio>
     
     <div id="avatar-corner">
-        <img src="avatar.jpg" alt="My Avatar" id="user-avatar" onclick="toggleAvatarMenu()">
-        <div id="avatar-stats-box" class="hidden">
-            <div class="avatar-buttons">
-                <button onclick="exportData()">💾 Export</button>
-                <button onclick="document.getElementById('import-file').click()">📂 Load</button>
+        <div id="avatar-stats-box" class="hidden glass">
+            <h2 class="character-title">Keeper of the Hearth</h2>
+            <div class="character-stats">
+                <div class="stat-row">
+                    <span>Vault</span> 
+                    <span id="account-balance">0.00</span>
+                </div>
+                <div class="stat-row">
+                    <span>Region</span> 
+                    <span>Farmington</span>
+                </div>
+            </div>
+            <div class="character-actions">
+                <button onclick="exportData()">Export Scroll</button>
+                <button onclick="document.getElementById('import-file').click()">Load Scroll</button>
                 <input type="file" id="import-file" style="display: none;" onchange="importData(event)" accept=".json">
             </div>
-            <div id="account-balance">Vault Balance: $0.00</div>
         </div>
+        <img src="avatar.jpg" alt="Character Sheet" id="user-avatar" onclick="toggleAvatarMenu()">
     </div>
 
-    <div id="toc-modal" class="hidden">
+    <div id="toc-modal" class="hidden glass">
         <div class="modal-content">
-            <h2>Table of Contents</h2>
+            <h2 class="cinzel-header">Master Journal</h2>
             <div id="toc-grid">
-                <button onclick="openApp('todo')">To Do List</button>
-                <button onclick="openApp('weekly-meal-plan')">Weekly Meal Plan</button>
-                <button onclick="openApp('bible-verse')">Bible Verse</button>
-                <button onclick="openApp('budget-ledger')">Budget Ledger</button>
+                <button onclick="openApp('todo')">Objectives</button>
+                <button onclick="openApp('weekly-meal-plan')">Provisions</button>
+                <button onclick="openApp('bible-verse')">Daily Verse</button>
+                <button onclick="openApp('budget-ledger')">Ledger</button>
                 <button onclick="openApp('phoebe')">Phoebe</button>
                 <button onclick="openApp('tripp')">Tripp</button>
-                <button onclick="openApp('journal')">Cory</button>
+                <button onclick="openApp('journal')">Companion</button>
             </div>
-            <button class="close-btn" onclick="toggleTOC()">Close</button>
+            <button class="close-btn" onclick="toggleTOC()">Close Journal</button>
         </div>
     </div>
 
-    <div id="app-modal" class="hidden">
+    <div id="app-modal" class="hidden glass">
         <div class="modal-content">
             <div class="modal-header">
-                <h2 id="modal-title">App Title</h2>
-                <span class="close-x" onclick="closeModal()">&times;</span>
+                <h2 id="modal-title" class="cinzel-header">App Title</h2>
+                <span class="close-text" onclick="closeModal()">Dismiss</span>
             </div>
             <div id="modal-body">
                 </div>
             <div class="modal-footer">
-                <button onclick="saveModalData()">Inscribe to Ledger</button>
-                <button onclick="closeModal()">Close</button>
+                <button onclick="saveModalData()">Inscribe</button>
+                <button onclick="closeModal()">Dismiss</button>
             </div>
         </div>
     </div>
