@@ -15,14 +15,19 @@
         <img src="momsjointday.jpg" id="bg-image" alt="Kitchen">
         <div id="seasonal-overlay"></div>
         <div class="atmosphere-overlay"></div>
-        <div id="window-zone"></div>
         <div id="decor-layer"></div>
 
         <div id="bookshelf-trigger" class="trigger" onclick="togglePanel('bookshelf-panel')" title="Almanac & Market"></div>
         <div id="hearth-trigger" class="trigger" onclick="togglePanel('audio-menu')" title="Soundscapes"></div>
         <div id="table-trigger" class="trigger" onclick="openApp('budget-ledger')" title="Budget Ledger"></div>
 
-    
+        <div id="weather-orb" title="Local Skies">
+            <div class="orb-content">
+                <span id="orb-temp">--°</span>
+                <span id="orb-desc">Scrying...</span>
+                <span id="orb-loc">Farmington</span>
+            </div>
+        </div>
 
         <div id="ai-familiar-corner" onclick="pokeGoblin()">
             <div id="goblin-dialogue" class="hidden glass">I am watching the hearth, Keeper.</div>
@@ -32,9 +37,9 @@
         <div id="avatar-corner">
             <div id="avatar-stats-box" class="panel glass hidden">
                 <h2 class="panel-title">Keeper Amber <span class="dismiss" onclick="togglePanel('avatar-stats-box')">Dismiss</span></h2>
-                <div class="stat-row"><span>Vault Balance</span> <span id="vault-balance">0.00</span></div>
-                <div class="stat-row"><span>Location</span> <span>Adamsville & Farmington</span></div>
-                <button onclick="openApp('master-journal')">Open Tome</button>
+                <div class="stat-row"><span>Vault Balance</span> <span id="vault-balance" style="color: var(--eso-gold); font-weight: bold;">0.00</span></div>
+                <div class="stat-row"><span>Region</span> <span>Farmington & Adamsville</span></div>
+                <button onclick="togglePanel('toc-modal'); togglePanel('avatar-stats-box');">Open Tome</button>
                 <div class="action-grid">
                     <button onclick="exportData()">Export</button>
                     <button onclick="document.getElementById('import-file').click()">Load</button>
@@ -55,29 +60,30 @@
             <div id="almanac-info" class="panel-section">Select a day...</div>
             
             <div class="panel-section">
-                <h3 onclick="toggleSection('market-content')">Market List</h3>
+                <h3 onclick="toggleSection('market-content')" style="cursor: pointer; border-bottom: 1px solid var(--eso-gold-dim);">Market List</h3>
                 <div id="market-content" class="hidden">
                     <input type="text" id="market-search" placeholder="Search #tags..." onkeyup="filterList('market')">
                     <input type="text" id="market-input" placeholder="Inscribe item... (Hit Enter)" onkeypress="handleLog(event, 'market')">
                     <ul id="market-list"></ul>
-                    <button class="clear-btn" onclick="clearList('market')">Purge List</button>
+                    <button class="clear-btn" onclick="clearList('market')" style="background: transparent; border: 1px solid #5a0000; color: #ff6b6b; margin-top: 10px;">Purge List</button>
                 </div>
             </div>
-            <button onclick="togglePanel('toc-modal')" style="margin-top: 10px;">Master Journal</button>
         </div>
 
         <div id="audio-menu" class="panel glass hidden">
             <h2 class="panel-title">Soundscapes <span class="dismiss" onclick="togglePanel('audio-menu')">Dismiss</span></h2>
-            <button onclick="playAudio('momsjointfire.mp3')">Hearth Fire</button>
-            <button onclick="playAudio('momsjointthunder.mp3')">Thunderstorm</button>
-            <button onclick="playAudio('momsjointrainforest.mp3')">Rainforest</button>
-            <button onclick="playAudio('momsjointraindrum.mp3')">Rain Drum</button>
-            <button onclick="playAudio('momsjointlightrain.mp3')">Light Rain</button>
-            <button onclick="playAudio('momsjointbeach.mp3')">Beach Waves</button>
-            <button onclick="playAudio('momsjointwhitenoise.mp3')">White Noise</button>
-            <button onclick="playAudio('momsjointdark.mp3')">Dark Ambience</button>
-            <button onclick="playAudio('momsjointflute.mp3')">Flute</button>
-            <button onclick="stopAudio()" style="border-color: #5a0000; color: #ff6b6b;">Silence</button>
+            <div class="audio-grid">
+                <button onclick="playAudio('momsjointfire.mp3')">Hearth Fire</button>
+                <button onclick="playAudio('momsjointthunder.mp3')">Thunder</button>
+                <button onclick="playAudio('momsjointrainforest.mp3')">Rainforest</button>
+                <button onclick="playAudio('momsjointraindrum.mp3')">Rain Drum</button>
+                <button onclick="playAudio('momsjointlightrain.mp3')">Light Rain</button>
+                <button onclick="playAudio('momsjointbeach.mp3')">Beach</button>
+                <button onclick="playAudio('momsjointwhitenoise.mp3')">White Noise</button>
+                <button onclick="playAudio('momsjointdark.mp3')">Dark</button>
+                <button onclick="playAudio('momsjointflute.mp3')">Flute</button>
+            </div>
+            <button onclick="stopAudio()" style="background: #2a0808; border-color: #5a0000; color: #ff6b6b; margin-top: 10px;">Silence</button>
         </div>
 
         <div id="toc-modal" class="modal hidden">
@@ -85,7 +91,7 @@
                 <h2 class="panel-title">The Tome <span class="dismiss" onclick="togglePanel('toc-modal')">Dismiss</span></h2>
                 <div class="toc-grid">
                     <button onclick="openApp('objectives')">Objectives (To-Do)</button>
-                    <button onclick="openApp('provisions')">Provisions (Meal Plan)</button>
+                    <button onclick="openApp('provisions')">Provisions (Meals)</button>
                     <button onclick="openApp('budget-ledger')">Budget Ledger</button>
                     <button onclick="openApp('important-numbers')">Important Numbers</button>
                     <button onclick="openApp('phoebe-journal')">Phoebe</button>
@@ -94,9 +100,9 @@
                     <button onclick="openApp('personal-journal')">Personal</button>
                 </div>
                 <div class="holy-wise-section">
-                    <h3>Daily Wisdom</h3>
-                    <p id="daily-verse">Consulting the heavens...</p>
-                    <p id="daily-affirmation">Drawing strength...</p>
+                    <h3 style="color: var(--eso-gold); font-family: 'Cinzel'; margin-bottom: 5px;">Daily Wisdom</h3>
+                    <p id="daily-verse" style="margin-top: 0;">Consulting the heavens...</p>
+                    <p id="daily-affirmation" style="color: var(--eso-gold-dim);">Drawing strength...</p>
                 </div>
             </div>
         </div>
@@ -105,7 +111,7 @@
             <div class="modal-content glass">
                 <h2 id="modal-title" class="panel-title">App <span class="dismiss" onclick="closeModal()">Dismiss</span></h2>
                 <div id="modal-instructions" class="instruction-text"></div>
-                <textarea id="app-input" placeholder="Inscribe your records here. Use #tags. For the ledger, use +50 or -20 on new lines."></textarea>
+                <textarea id="app-input" placeholder="Inscribe your records here..."></textarea>
                 <button onclick="saveModal()">Inscribe Record</button>
             </div>
         </div>
