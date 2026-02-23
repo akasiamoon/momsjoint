@@ -25,7 +25,7 @@ function updateEnvironment() {
     } else if (hour >= 17 && hour < 20) {
         bgImage.src = "momsjointsunset.jpg"; // Sunset 
     } else {
-        bgImage.src = ",p,sjointnight.jpg"; // Night 
+        bgImage.src = "momsjointnight.jpg"; // Night 
     }
 }
 updateEnvironment();
