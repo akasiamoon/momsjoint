@@ -111,10 +111,10 @@ function importData(e) {
 // WEATHER & BACKGROUND
 function updateEnv() {
     const h = new Date().getHours(), img = document.getElementById('bg-image');
-    img.src = h >= 6 && h < 17 ? "YOUR_DAY.jpg" : h >= 17 && h < 20 ? "YOUR_SUNSET.jpg" : "YOUR_NIGHT.jpg";
+    img.src = h >= 6 && h < 17 ? "momsjointday.jpg" : h >= 17 && h < 20 ? "momsjointsunset.jpg" : "momsjointnight.jpg";
 }
 updateEnv();
-const API = "YOUR_API_KEY", ZIP = "YOUR_ZIP";
+const API = "Y833c12742186f3ca3e693f0507a09ec0", ZIP = "38834";
 async function upWeather() {
     if (API === "YOUR_API_KEY") return;
     const r = await fetch(`https://api.openweathermap.org/data/2.5/weather?zip=${ZIP},US&appid=${API}`);
