@@ -5,19 +5,16 @@ const IMAGES = {
     sunset: "momsjointsunset.jpg",
     night: "momsjointnight.jpg"
 };
-const API_KEY = "88f3e35af62ba59bad38a3d346e0ca84";
+const API_KEY = "88f3e35af62ba59bad38a3d346e0ca84"; 
 const ZIP_CODE = "38834"; // Farmington, MS
 let currentAudio = null;
 
-// --- 2. DATA HANDLING (Crash-Proof) ---
+// --- 2. DATA HANDLING ---
 let appData = JSON.parse(localStorage.getItem('moonshearthData')) || {};
-// Force-Initialize all data structures
+// Force-Initialize essential folders
 if (!appData.market) appData.market = [];
 if (!appData.vault) appData.vault = 0.00;
 if (!appData.events) appData.events = {};
-// Ensure dynamic app data exists (tea-log, cat-log, etc.)
-const dynamicApps = ['tea-log', 'cat-log', 'phoebe-journal', 'tripp-journal', 'cory-journal', 'personal-journal', 'objectives', 'provisions', 'budget-ledger', 'important-numbers', 'master-journal'];
-dynamicApps.forEach(app => { if(!appData[app]) appData[app] = ""; });
 
 function save() {
     localStorage.setItem('moonshearthData', JSON.stringify(appData));
@@ -28,23 +25,21 @@ function save() {
 // --- 3. STARTUP ---
 window.onload = function() {
     updateEnvironment();
-    fetchWeather();
+    fetchWeather(); // Call immediately
     renderAlmanac();
     fetchHolyWise();
     save();
     renderList('market');
     
-    // Timers
-    setInterval(updateEnvironment, 60000); // Sky check (1 min)
-    setInterval(fetchWeather, 900000); // Weather check (15 min)
+    setInterval(updateEnvironment, 60000); 
+    setInterval(fetchWeather, 300000); // Check weather every 5 mins
 };
 
-// --- 4. ENVIRONMENT ---
+// --- 4. ENVIRONMENT & WEATHER ---
 function updateEnvironment() {
     const h = new Date().getHours();
     const bg = document.getElementById('bg-image');
     if (!bg) return;
-
     if (h >= 5 && h < 7) bg.src = IMAGES.dawn;
     else if (h >= 7 && h < 17) bg.src = IMAGES.day;
     else if (h >= 17 && h < 20) bg.src = IMAGES.sunset;
@@ -55,10 +50,15 @@ async function fetchWeather() {
     const tDisp = document.getElementById('orb-temp');
     if (!tDisp) return;
     try {
-        const r = await fetch(`https://api.openweathermap.org/data/2.5/weather?zip=${ZIP_CODE},us&units=imperial&appid=${API_KEY}`);
+        const url = `https://api.openweathermap.org/data/2.5/weather?zip=${ZIP_CODE},us&units=imperial&appid=${API_KEY}`;
+        const r = await fetch(url);
         const d = await r.json();
         if (d.main) tDisp.innerText = `${Math.round(d.main.temp)}°`;
-    } catch(e) { console.warn("Weather Error:", e); tDisp.innerText = "--°"; }
+        else tDisp.innerText = "--°";
+    } catch(e) { 
+        console.warn("Weather Error:", e); 
+        tDisp.innerText = "?"; // Indicator that it tried but failed
+    }
 }
 
 // --- 5. ALMANAC ---
@@ -105,7 +105,7 @@ function toggleSection(id) { document.getElementById(id).classList.toggle('hidde
 function closeModal() { document.getElementById('app-modal').classList.add('hidden'); }
 
 function openApp(appId) {
-    // Close other panels to prevent clutter
+    // Hide menus so they don't block the view
     document.getElementById('toc-modal').classList.add('hidden');
     document.getElementById('avatar-stats-box').classList.add('hidden');
     
@@ -118,6 +118,7 @@ function openApp(appId) {
     document.getElementById('modal-instructions').innerText = inst;
     
     const ta = document.getElementById('app-input');
+    // Load data, or default empty string
     ta.value = appData[appId] || "";
     
     // Smart Timestamp Logic
