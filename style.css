@@ -1,121 +1,87 @@
-/* --- 1. CORE SYSTEM --- */
 :root {
     --eso-gold: #cda24b;
     --eso-gold-dim: #8b6d32;
-    --parchment: rgba(20, 15, 10, 0.95);
-    --gold-gradient: linear-gradient(145deg, #f5d18d 0%, #cda24b 50%, #8b6d32 100%);
-    --inner-glow: inset 0 0 15px rgba(205, 162, 75, 0.1);
+    --parchment: rgba(15, 12, 8, 0.98);
+    --text-main: #e0d8c8; /* Creamy white for readability */
 }
 
-* { box-sizing: border-box; }
-
-body, html {
-    margin: 0; padding: 0; 
-    width: 100vw; height: 100vh; 
-    background: #000; 
-    overflow: hidden; 
-    font-family: 'Cormorant Garamond', serif; 
-}
-
-.app-container {
-    position: relative;
-    width: 100vw; height: 100vh;
-    display: flex; justify-content: center; align-items: center;
-}
-
-/* --- 2. THE BACKGROUND (Pixel-Perfect Alignment) --- */
-#bg-image {
-    position: absolute;
-    top: 0; left: 0;
-    width: 100%; height: 100%;
-    object-fit: cover; /* This ensures the sink and bookshelf stay in the same % coordinates */
-    z-index: 1;
-}
-
-/* --- 3. PREMIUM UI PANELS (The "Journal" Look) --- */
-.glass {
-    background: var(--parchment);
-    backdrop-filter: blur(10px);
-    border: 2px solid var(--eso-gold);
-    outline: 1px solid #000; /* The "Double Border" effect */
-    box-shadow: 0 15px 50px rgba(0,0,0,0.9), var(--inner-glow);
-    border-radius: 2px;
-}
-
-/* --- 4. THE WONKY FIXES (Coordinates) --- */
-
-/* The Sink Clock */
-#sink-clock {
-    position: absolute;
-    top: 61%; right: 26.5%; /* Precisely over the sink area */
-    color: var(--eso-gold);
-    font-family: 'Cinzel', serif;
-    font-size: 2.4vw;
-    text-shadow: 2px 2px 5px #000, 0 0 10px rgba(205, 162, 75, 0.5);
-    z-index: 15;
-    pointer-events: none;
-}
-
-/* The Bookshelf Panel */
-#bookshelf-panel {
-    position: absolute;
-    top: 5%; left: 3%;
-    width: 320px;
-    max-height: 88%;
-    padding: 25px;
-    z-index: 50;
-}
-
-/* The Avatar (Character Sheet) */
+/* --- THE CHARACTER SHEET (Avatar Menu) --- */
 #avatar-corner {
     position: absolute;
     bottom: 3%; right: 2%;
     z-index: 100;
-    display: flex; flex-direction: column; align-items: flex-end;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
 }
 
-#user-avatar {
-    width: 140px; height: 140px;
-    border: 3px solid var(--eso-gold);
-    outline: 1px solid #000;
-    box-shadow: 0 0 25px #000;
-    transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    object-fit: cover;
-    border-radius: 50%;
+#avatar-stats-box {
+    width: 280px;
+    padding: 20px;
+    margin-bottom: 10px;
+    background: var(--parchment);
+    border: 2px solid var(--eso-gold);
+    backdrop-filter: blur(10px);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.9);
+    color: var(--text-main); /* FIX: Light text on dark background */
 }
 
-#user-avatar:hover { transform: scale(1.08); box-shadow: 0 0 20px var(--eso-gold); }
+.stat-row { 
+    display: flex; 
+    justify-content: space-between; 
+    margin-bottom: 8px; 
+    border-bottom: 1px solid rgba(205, 162, 75, 0.2);
+}
 
-/* --- 5. NO-ICON TYPOGRAPHY --- */
-.close-text {
-    font-family: 'Cinzel';
-    color: var(--eso-gold-dim);
+.character-title { 
+    font-family: 'Cinzel'; 
+    color: var(--eso-gold); 
+    margin-top: 0; 
+    border-bottom: 1px solid var(--eso-gold);
+    padding-bottom: 5px;
+}
+
+/* --- THE ALMANAC (Calendar) --- */
+#almanac-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 4px;
+    margin-top: 10px;
+    min-height: 150px; /* Ensure it doesn't collapse */
+}
+
+.almanac-day {
+    text-align: center;
+    padding: 8px 0;
+    color: var(--text-main); /* FIX: Visible numbers */
     cursor: pointer;
-    font-size: 0.7rem;
-    letter-spacing: 1px;
+    border: 1px solid transparent;
 }
-.close-text:hover { color: #fff; text-shadow: 0 0 5px var(--eso-gold); }
 
+.almanac-day:hover {
+    background: rgba(205, 162, 75, 0.2);
+    border-color: var(--eso-gold);
+}
+
+.almanac-day.today {
+    color: #000;
+    background: var(--eso-gold);
+    font-weight: bold;
+}
+
+/* --- BUTTONS --- */
 button {
-    background: var(--gold-gradient);
-    border: 1px solid #5a461e;
-    color: #1a1a1a;
-    padding: 10px 18px;
-    cursor: pointer;
+    background: linear-gradient(to bottom, #cda24b, #8b6d32);
+    border: 1px solid #332811;
+    color: #1a1a1a; /* Dark text on Gold buttons is okay */
     font-family: 'Cinzel';
-    font-weight: 700;
-    letter-spacing: 1px;
-    transition: 0.3s;
-    text-transform: uppercase;
-    font-size: 0.75rem;
+    font-weight: bold;
+    padding: 8px 12px;
+    cursor: pointer;
+    width: 100%;
+    margin-top: 5px;
 }
 
-button:hover { filter: brightness(1.2); box-shadow: 0 0 15px var(--eso-gold); }
+button:hover { filter: brightness(1.2); }
 
-/* --- 6. INTERACTIVE ATMOSPHERE --- */
-#bookshelf-trigger, #hearth-trigger, #table-trigger {
-    position: absolute; z-index: 10; cursor: pointer;
-}
-#bookshelf-trigger { top: 5%; left: 3%; width: 18%; height: 60%; }
-#hearth-trigger { top: 46%; left: 23%; width: 11%; height: 23%; }
-#table-trigger { bottom: 10%; right: 28%; width: 20%; height: 22%; }
+.hidden { display: none !important; }
